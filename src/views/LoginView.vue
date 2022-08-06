@@ -2,6 +2,7 @@
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { mdiAccount, mdiAsterisk } from '@mdi/js'
+
 import SectionFullScreen from '@/components/SectionFullScreen.vue'
 import CardBox from '@/components/CardBox.vue'
 import FormCheckRadioPicker from '@/components/FormCheckRadioPicker.vue'
@@ -12,8 +13,8 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import LayoutGuest from '@/layouts/LayoutGuest.vue'
 
 const form = reactive({
-  login: 'john.doe',
-  pass: 'highly-secure-password-fYjUw-',
+  login: '',
+  pass: '',
   remember: ['remember']
 })
 
@@ -22,13 +23,14 @@ const router = useRouter()
 const submit = () => {
   router.push('/dashboard')
 }
+const showPassword = false
 </script>
 
 <template>
   <LayoutGuest>
     <SectionFullScreen
       v-slot="{ cardClass }"
-      bg="purplePink"
+      bg="white"
     >
       <CardBox
         :class="cardClass"
@@ -54,7 +56,7 @@ const submit = () => {
           <FormControl
             v-model="form.pass"
             :icon="mdiAsterisk"
-            type="password"
+            type="showPassword ? text : password "
             name="password"
             autocomplete="current-password"
           />
@@ -73,12 +75,12 @@ const submit = () => {
               color="info"
               label="Login"
             />
-            <BaseButton
+            <!-- <BaseButton
               to="/dashboard"
               color="info"
               outline
               label="Back"
-            />
+            /> -->
           </BaseButtons>
         </template>
       </CardBox>

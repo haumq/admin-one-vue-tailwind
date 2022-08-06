@@ -45,13 +45,13 @@ const transactionBarItems = computed(() => mainStore.history)
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      
+
       <SectionTitleLineWithButton
         :icon="mdiChartTimelineVariant"
         title="Overview"
         main
       >
-        <BaseButton
+        <!-- <BaseButton
           href="https://github.com/justboil/admin-one-vue-tailwind"
           target="_blank"
           :icon="mdiGithub"
@@ -59,9 +59,9 @@ const transactionBarItems = computed(() => mainStore.history)
           color="contrast"
           rounded-full
           small
-        />
+        /> -->
       </SectionTitleLineWithButton>
-      
+
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
         <CardBoxWidget
           trend="12%"
@@ -116,14 +116,14 @@ const transactionBarItems = computed(() => mainStore.history)
         </div>
       </div>
 
-      <SectionBannerStarOnGitHub />
+      <!-- <SectionBannerStarOnGitHub /> -->
 
-      <SectionTitleLineWithButton
+      <!-- <SectionTitleLineWithButton
         :icon="mdiChartPie"
         title="Trends overview"
-      />
+      /> -->
 
-      <CardBox
+      <!-- <CardBox
         title="Performance"
         :icon="mdiFinance"
         :header-icon="mdiReload"
@@ -136,19 +136,19 @@ const transactionBarItems = computed(() => mainStore.history)
             class="h-96"
           />
         </div>
-      </CardBox>
+      </CardBox> -->
 
       <SectionTitleLineWithButton
         :icon="mdiAccountMultiple"
         title="Clients"
       />
 
-      <NotificationBar
+      <!-- <NotificationBar
         color="info"
         :icon="mdiMonitorCellphone"
       >
         <b>Responsive table.</b> Collapses on mobile
-      </NotificationBar>
+      </NotificationBar> -->
 
       <CardBox
         :icon="mdiMonitorCellphone"

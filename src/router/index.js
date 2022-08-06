@@ -1,15 +1,15 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Style from '@/views/StyleView.vue'
 import Home from '@/views/HomeView.vue'
 
 const routes = [
   {
     meta: {
-      title: 'Select style'
+      title: 'Home'
     },
     path: '/',
-    name: 'style',
-    component: Style
+    name: 'home',
+    component: Home
   },
   {
     // Document title tag
@@ -80,7 +80,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
   scrollBehavior (to, from, savedPosition) {
     return savedPosition || { top: 0 }

@@ -172,7 +172,7 @@ const logout = () => {
               is-desktop-icon-only
             />
           </NavBarItem>
-          <NavBarItem
+          <!-- <NavBarItem
             href="https://github.com/justboil/admin-one-vue-tailwind"
             is-desktop-icon-only
           >
@@ -181,7 +181,7 @@ const logout = () => {
               label="GitHub"
               is-desktop-icon-only
             />
-          </NavBarItem>
+          </NavBarItem> -->
           <NavBarItem
             is-desktop-icon-only
             @click="logout"

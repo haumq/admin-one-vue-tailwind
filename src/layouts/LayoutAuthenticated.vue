@@ -25,7 +25,7 @@ const overlayClick = () => {
       <NavBar />
       <AsideMenu :menu="menu" />
       <slot />
-      <FooterBar />
+      <!-- <FooterBar /> -->
       <OverlayLayer
         v-show="layoutStore.isAsideLgActive"
         z-index="z-30"

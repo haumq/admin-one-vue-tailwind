@@ -22,8 +22,8 @@ const styleStore = useStyleStore(pinia)
 const layoutStore = useLayoutStore(pinia)
 
 /* Fetch sample data */
-mainStore.fetch('clients')
-mainStore.fetch('history')
+// mainStore.fetch('clients')
+// mainStore.fetch('history')
 
 /* App style */
 styleStore.setStyle(localStorage[styleKey] ?? 'basic')
@@ -34,7 +34,7 @@ if ((!localStorage[darkModeKey] && window.matchMedia('(prefers-color-scheme: dar
 }
 
 /* Default title tag */
-const defaultDocumentTitle = 'Admin One Vue 3 Tailwind'
+const defaultDocumentTitle = 'Phát bằng - Vue 3 Tailwind'
 
 /* Collapse mobile aside menu on route change */
 router.beforeEach(() => {
