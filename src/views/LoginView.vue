@@ -30,7 +30,7 @@ const showPassword = false
   <LayoutGuest>
     <SectionFullScreen
       v-slot="{ cardClass }"
-      bg="white"
+      bg="whiteBlue"
     >
       <CardBox
         :class="cardClass"
