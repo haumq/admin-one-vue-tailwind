@@ -13,7 +13,8 @@ export const useMainStore = defineStore('main', {
 
     /* Sample data (commonly used) */
     clients: [],
-    history: []
+    history: [],
+    students: []
   }),
   actions: {
     setUser (payload) {
@@ -38,6 +39,21 @@ export const useMainStore = defineStore('main', {
         })
         .catch(error => {
           alert(error.message)
+        })
+    },
+    fetchData () {
+      let urlFetch= 'https://script.google.com/macros/s/AKfycbwR4DSX3Y3-1C7Xis1uzBYuvgo4jn1HZ_f7WwRnd9bBD1GskKaEkm7CiH9mGdzCN13P/exec?key=AIzaSyAEzVpmZDCzC2e5Iz6gJaF-EGLoWc-xfXU'
+      let u = 'https://api.coindesk.com/v1/bpi/currentprice.json'
+      axios
+        .get(urlFetch)
+        .then(r => {
+          if (r.data && r.data.data) {
+            this.students = r.data.data
+          }
+          console.log(r.data)
+        })
+        .catch(error => {
+          console.log(error.message)
         })
     }
   }

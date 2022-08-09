@@ -19,6 +19,11 @@ export default [
     label: 'Dashboard'
   },
   {
+    to: '/search',
+    label: 'Search',
+    icon: mdiTable
+  },
+  {
     to: '/tables',
     label: 'Tables',
     icon: mdiTable
