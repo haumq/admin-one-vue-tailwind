@@ -39,6 +39,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'Student'
+    },
+    path: '/student',
+    name: 'student',
+    component: () => import('@/views/StudentView.vue')
+  },
+  {
+    meta: {
       title: 'Forms'
     },
     path: '/forms',

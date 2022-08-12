@@ -24,6 +24,11 @@ export default [
     icon: mdiTable
   },
   {
+    to: '/student',
+    label: 'Student',
+    icon: mdiTable
+  },
+  {
     to: '/tables',
     label: 'Tables',
     icon: mdiTable

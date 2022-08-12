@@ -55,6 +55,24 @@ export const useMainStore = defineStore('main', {
         .catch(error => {
           console.log(error.message)
         })
+    },
+    transferToWait(payload) {
+      let urlFetch= 'https://script.google.com/macros/s/AKfycbwR4DSX3Y3-1C7Xis1uzBYuvgo4jn1HZ_f7WwRnd9bBD1GskKaEkm7CiH9mGdzCN13P/exec?key=AIzaSyAEzVpmZDCzC2e5Iz6gJaF-EGLoWc-xfXU&post=transfertowaitlist'
+      let u = 'https://api.coindesk.com/v1/bpi/currentprice.json'
+      
+      axios
+        .post(urlFetch, payload, {headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },})
+        .then(r => {    
+          if (r.data && r.data.data) {
+            this.students = r.data.data
+          }      
+          console.log(r.data)
+        })
+        .catch(error => {
+          console.log(error.message)
+        })
     }
   }
 })

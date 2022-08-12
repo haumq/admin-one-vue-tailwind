@@ -15,6 +15,7 @@ import ButtonFinish from "./ButtonFinish.vue";
 import ButtonTransferToWait from "./ButtonTransferToWait.vue";
 import ButtonPropressing from "./ButtonPropressing.vue";
 
+
 defineProps({
   checkable: Boolean,
 });
@@ -22,6 +23,11 @@ defineProps({
 const styleStore = useStyleStore();
 
 const mainStore = useMainStore();
+
+const transferToWait =  function(row){
+  let payload = { row: row}
+  mainStore.transferToWait(payload)
+  } 
 
 const items = computed(() => mainStore.students);
 
@@ -157,15 +163,16 @@ const checked = (isChecked, client) => {
         <!-- <th /> -->
         <th>STT</th>
         <th>MSSV</th>
-        <th>TÊN - NGÀY SINH</th>
-        <!-- <th>NGÀY SINH</th> -->
-        <th>NGÀNH</th>
-        <th>SỐ VÀO SỔ</th>
+        <th>TÊN <span class="hidden lg:inline"> - NGÀY SINH - NGÀNH</span></th>
+        <th class="lg:hidden">NGÀY SINH</th>
+        <th class="lg:hidden">NGÀNH</th>
+        <th class="whitespace-nowrap">SỐ VÀO SỔ</th>
         <th>GDQP</th>
         <th class="whitespace-nowrap">THIẾU HS, HP</th>
         <th>KHẢO SÁT</th>
         <th>LỄ PHỤC</th>
-        <th />
+        <th>TRẠNG THÁI</th>
+        <!-- <th /> -->
       </tr>
     </thead>
     <tbody>
@@ -180,11 +187,15 @@ const checked = (isChecked, client) => {
         <td data-label="MSSV">
           {{ student.MSSV }}
         </td>
-        <td data-label="HoTen" class="whitespace-nowrap " >
+        <td data-label="HoTen" class="lg:whitespace-nowrap" >
           <p class="font-bold">{{ student.HoTen }}</p>
-            <small >{{ student.NgaySinh }}</small>
+            <small class="hidden lg:block">{{ student.NgaySinh }}</small>
+            <small class="hidden lg:block">{{ student.Nganh }}</small >
         </td>
-        <td data-label="Nganh">
+        <td data-label="NgaySinh" class="lg:hidden">
+          {{ student.NgaySinh }}
+        </td>
+        <td data-label="Nganh" class="lg:hidden">
           {{ student.Nganh }}
         </td>
         <td data-label="SoVaoSo">
@@ -219,7 +230,7 @@ const checked = (isChecked, client) => {
             <ButtonWait v-if="student.TrangThai == 1" />
             <ButtonPropressing v-else-if="student.TrangThai == 2" />
             <ButtonFinish v-else-if="student.TrangThai == 3"/>
-            <ButtonTransferToWait v-else />
+            <ButtonTransferToWait v-else @click="transferToWait(student.STT)" />
 
           </BaseButtons>
         </td>
@@ -231,7 +242,7 @@ const checked = (isChecked, client) => {
       <BaseButtons>
 
         <BaseButton
-          v-if="itemsPaginated"
+          v-if="numPages > 0"
           :disabled="currentPage === 1"
           :icon="mdiChevronLeft"
           small
@@ -266,7 +277,7 @@ const checked = (isChecked, client) => {
           @click="currentPage = numPages"
         />
         <BaseButton
-          v-if="nextPage"
+          v-if="numPages > 0"
           :disabled="currentPage === numPages"
           :icon="mdiChevronRight"
           small
@@ -275,7 +286,7 @@ const checked = (isChecked, client) => {
         />
 
       </BaseButtons>
-      <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
+      <small v-if="numPages > 0">Page {{ currentPageHuman }} of {{ numPages }}</small>
     </BaseLevel>
     <!-- <Pagination /> -->
   </div>
