@@ -18,13 +18,12 @@ import BaseButton from "@/components/BaseButton.vue";
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiTableBorder" title="Tables" main>
-      </SectionTitleLineWithButton>
+      <!-- <SectionTitleLineWithButton :icon="mdiTableBorder" title="Tables" main>
+      </SectionTitleLineWithButton> -->
 
       <CardBox
         class="mb-6"
-        title="Clients"
-        :icon="mdiAccountMultiple"
+
         has-table
       >
         <TableSearchStudent />

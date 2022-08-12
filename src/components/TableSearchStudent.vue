@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useStyleStore } from "@/stores/style";
-import { mdiEye, mdiTrashCan } from "@mdi/js";
+import { mdiEye, mdiTrashCan, mdiArrowRight, mdiChevronRight, mdiChevronLeft} from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
@@ -10,6 +10,10 @@ import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import Pagination from "./pagination.vue";
+import ButtonWait from "./ButtonWait.vue";
+import ButtonFinish from "./ButtonFinish.vue";
+import ButtonTransferToWait from "./ButtonTransferToWait.vue";
+import ButtonPropressing from "./ButtonPropressing.vue";
 
 defineProps({
   checkable: Boolean,
@@ -27,30 +31,82 @@ const isModalDangerActive = ref(false);
 
 const perPage = ref(10);
 
-const currentPage = ref(0);
+const currentPage = ref(1)
+
+const prevStep = ref(0)
+
+const nextStep = ref(0)
 
 const checkedRows = ref([]);
 
 const itemsPaginated = computed(() =>
   items.value.slice(
-    perPage.value * currentPage.value,
-    perPage.value * (currentPage.value + 1)
+    perPage.value * (currentPage.value - 1),
+    perPage.value * (currentPage.value)
   )
 );
+const nextPage = computed(() =>
+ currentPage.value < numPages.value ? currentPage.value + 1 : numPages.value
+);
+const prevPage = computed(() =>
+ currentPage.value > 1 ? currentPage.value - 1 : 1
+);
 
-const numPages = computed(() => Math.ceil(items.value.length / perPage.value));
+const numPages = computed(() => Math.ceil(items.value.length / perPage.value) - 1);
 
-const currentPageHuman = computed(() => currentPage.value + 1);
+const currentPageHuman = computed(() => currentPage.value);
+
+// const pagesList = computed(() => {
+//   const pagesList = [];
+
+//   for (let i = 0; i < numPages.value; i++) {
+//     pagesList.push(i);
+//   }
+
+//   return pagesList;
+// });
 
 const pagesList = computed(() => {
   const pagesList = [];
+  // let prevStep = 0;
+  // let nextStep = 0;
 
-  for (let i = 0; i < numPages.value; i++) {
+  // for (let i = 0; i < numPages.value; i++) {
+  //   pagesList.push(i)
+  // }
+
+  if(numPages.value <= 7){
+    for (let i = 1; i < numPages.value; i++) {
     pagesList.push(i);
+     }
+  }else {
+    currentPage.value > 3 ? prevStep.value = 2 : prevStep.value = (currentPage.value - 1);
+    currentPage.value < numPages.value - 2 ? nextStep.value = 2 : nextStep.value = (numPages.value - currentPage.value) ;
+    // prevStep.value < 0 ? prevStep.value = 0 : prevStep.value = prevStep.value;
+    // nextStep.value < 0 ? nextStep.value = 0 : nextStep.value = nextStep.value;
+    (nextStep.value = prevStep.value < 2 ? nextStep.value + (2 - prevStep.value) : nextStep.value)
+    prevStep.value = nextStep.value < 2 ? prevStep.value + (2 - nextStep.value) : prevStep.value
+    // if(currentPage < 4 && numPages.value > 7) {
+    //   nextStep.value = currentPage
+    // }
+    console.log(prevStep.value);
+    console.log(nextStep.value);
+
+
+    for (let i = prevStep.value; i > 0; i--) {
+    pagesList.push(currentPage.value - i);
+     }
+    pagesList.push(currentPage.value);
+
+    for (let i = 0; i < nextStep.value; i++) {
+    pagesList.push(currentPage.value + i + 1);
+     }
+
   }
 
-  return pagesList;
-});
+  return pagesList
+})
+
 
 const remove = (arr, cb) => {
   const newArr = [];
@@ -98,74 +154,126 @@ const checked = (isChecked, client) => {
     <thead>
       <tr>
         <th v-if="checkable" />
-        <th />
+        <!-- <th /> -->
+        <th>STT</th>
         <th>MSSV</th>
-        <th>Tên</th>
-        <th>Ngày sinh</th>
-        <th>Ngành</th>
-        <th>Số vào sổ</th>
-        <th>Thiếu Hồ sơ, HP</th>
-        <th>Khảo sát</th>
-        <th>Lễ Phục</th>
+        <th>TÊN - NGÀY SINH</th>
+        <!-- <th>NGÀY SINH</th> -->
+        <th>NGÀNH</th>
+        <th>SỐ VÀO SỔ</th>
+        <th>GDQP</th>
+        <th class="whitespace-nowrap">THIẾU HS, HP</th>
+        <th>KHẢO SÁT</th>
+        <th>LỄ PHỤC</th>
         <th />
       </tr>
     </thead>
     <tbody>
-      <tr v-for="client in itemsPaginated" :key="client.MSSV">
-        <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" />
-        <td class="border-b-0 lg:w-6 before:hidden">
+      <tr v-for="student in itemsPaginated" :key="student.MSSV"  >
+        <TableCheckboxCell v-if="checkable" @checked="checked($event, student)" />
+        <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
-        </td>
+        </td> -->
+          <td data-label="STT">
+            {{ student.STT - 1 }}
+          </td>
         <td data-label="MSSV">
-          {{ client.MSSV }}
+          {{ student.MSSV }}
         </td>
-        <td data-label="HoTen">
-          {{ client.HoTen }}
-        </td>
-        <td data-label="NgaySinh">
-          {{ client.NgaySinh }}
+        <td data-label="HoTen" class="whitespace-nowrap " >
+          <p class="font-bold">{{ student.HoTen }}</p>
+            <small >{{ student.NgaySinh }}</small>
         </td>
         <td data-label="Nganh">
-          {{ client.Nganh }}
+          {{ student.Nganh }}
         </td>
         <td data-label="SoVaoSo">
-          {{ client.SoVaoSo }}
+          {{ student.SoVaoSo }}
+        </td>
+        <td data-label="GDQP">
+          {{ student.GDQP }}
         </td>
         <td data-label="ThieuHSHP">
-          {{ client.ThieuHSHP }}
+          {{ student.ThieuHSHP }}
         </td>
         <td data-label="Khaosat">
-          {{ client.Khaosat }}
+          {{ student.KhaoSat }}
         </td>
         <td data-label="LePhuc">
-          {{ client.LePhuc }}
+          {{ student.LePhuc }}
         </td>
         <!-- <td data-label="Progress" class="lg:w-32">
           <progress
             class="flex w-2/5 self-center lg:w-full"
             max="100"
-            :value="client.progress"
+            :value="student.progress"
           >
-            {{ client.progress }}
+            {{ student.progress }}
           </progress>
         </td> -->
-        <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          <small class="text-gray-500 dark:text-slate-400" :title="client.created">{{ client.created }}</small>
-        </td>
+        <!-- <td data-label="NgayTao" class="lg:w-1 whitespace-nowrap">
+          <small class="text-gray-500 dark:text-slate-400" :title="student.NgayTao">{{ student.NgayTao }}</small>
+        </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="info" :icon="mdiEye" small @click="isModalActive = true" />
-            <BaseButton color="danger" :icon="mdiTrashCan" small @click="isModalDangerActive = true" />
+            <ButtonWait v-if="student.TrangThai == 1" />
+            <ButtonPropressing v-else-if="student.TrangThai == 2" />
+            <ButtonFinish v-else-if="student.TrangThai == 3"/>
+            <ButtonTransferToWait v-else />
+
           </BaseButtons>
         </td>
       </tr>
     </tbody>
   </table>
-  <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+  <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none">
     <BaseLevel>
       <BaseButtons>
-        <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1" small
-          :outline="styleStore.darkMode" @click="currentPage = page" />
+
+        <BaseButton
+          v-if="itemsPaginated"
+          :disabled="currentPage === 1"
+          :icon="mdiChevronLeft"
+          small
+          :outline="styleStore.darkMode"
+          @click="currentPage = prevPage"
+        />
+        <BaseButton
+          v-if="currentPage > 3"
+          :active="currentPage == 1"
+          :label="1"
+          small
+          :outline="styleStore.darkMode"
+          @click="currentPage = 1"
+        />
+        <span v-if="currentPage > 4">...</span>
+        <BaseButton
+          v-for="page in pagesList"
+          :key="page"
+          :active="page === currentPage"
+          :label="page"
+          small
+          :outline="styleStore.darkMode"
+          @click="currentPage = page"
+        />
+         <span v-if="currentPage < numPages - 3">...</span>
+        <BaseButton
+          v-if="currentPage < numPages - 2"
+          :active="currentPage == numPages"
+          :label="numPages"
+          small
+          :outline="styleStore.darkMode"
+          @click="currentPage = numPages"
+        />
+        <BaseButton
+          v-if="nextPage"
+          :disabled="currentPage === numPages"
+          :icon="mdiChevronRight"
+          small
+          :outline="styleStore.darkMode"
+          @click="currentPage = nextPage"
+        />
+
       </BaseButtons>
       <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
     </BaseLevel>
