@@ -9,7 +9,10 @@ import {
   mdiViewList,
   mdiTelevisionGuide,
   mdiResponsive,
-  mdiPalette
+  mdiPalette,
+  mdiHumanQueue,
+  mdiSearchWeb,
+  mdiCertificate
 } from '@mdi/js'
 
 export default [
@@ -21,7 +24,17 @@ export default [
   {
     to: '/search',
     label: 'Search',
-    icon: mdiTable
+    icon: mdiSearchWeb
+  },
+  {
+    to: '/queue',
+    label: 'Queue',
+    icon: mdiHumanQueue
+  },
+  {
+    to: '/finish',
+    label: 'Finish',
+    icon: mdiCertificate
   },
   {
     to: '/student',

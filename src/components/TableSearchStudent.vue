@@ -18,6 +18,7 @@ import ButtonPropressing from "./ButtonPropressing.vue";
 
 defineProps({
   checkable: Boolean,
+  
 });
 
 const styleStore = useStyleStore();
@@ -29,7 +30,17 @@ const transferToWait =  function(row){
   mainStore.transferToWait(payload)
   } 
 
-const items = computed(() => mainStore.students);
+const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
+const items = computed(() => {
+  let students = mainStore.students
+  if(transferToWaitListRow.value) {
+   students[transferToWaitListRow.value -2].TrangThai = 1;
+  }
+  return students;
+}
+);
+
+
 
 const isModalActive = ref(false);
 
@@ -58,7 +69,7 @@ const prevPage = computed(() =>
  currentPage.value > 1 ? currentPage.value - 1 : 1
 );
 
-const numPages = computed(() => Math.ceil(items.value.length / perPage.value) - 1);
+const numPages = computed(() => Math.ceil(items.value.length / perPage.value));
 
 const currentPageHuman = computed(() => currentPage.value);
 
@@ -82,7 +93,7 @@ const pagesList = computed(() => {
   // }
 
   if(numPages.value <= 7){
-    for (let i = 1; i < numPages.value; i++) {
+    for (let i = 1; i <= numPages.value; i++) {
     pagesList.push(i);
      }
   }else {
@@ -187,30 +198,30 @@ const checked = (isChecked, client) => {
         <td data-label="MSSV">
           {{ student.MSSV }}
         </td>
-        <td data-label="HoTen" class="lg:whitespace-nowrap" >
+        <td data-label="Tên" class="lg:whitespace-nowrap" >
           <p class="font-bold">{{ student.HoTen }}</p>
             <small class="hidden lg:block">{{ student.NgaySinh }}</small>
             <small class="hidden lg:block">{{ student.Nganh }}</small >
         </td>
-        <td data-label="NgaySinh" class="lg:hidden">
+        <td data-label="Ngày Sinh" class="lg:hidden">
           {{ student.NgaySinh }}
         </td>
-        <td data-label="Nganh" class="lg:hidden">
+        <td data-label="Ngành" class="lg:hidden">
           {{ student.Nganh }}
         </td>
-        <td data-label="SoVaoSo">
+        <td data-label="Số Vào Sổ">
           {{ student.SoVaoSo }}
         </td>
         <td data-label="GDQP">
           {{ student.GDQP }}
         </td>
-        <td data-label="ThieuHSHP">
+        <td data-label="Thiếu HS, HP">
           {{ student.ThieuHSHP }}
         </td>
-        <td data-label="Khaosat">
+        <td data-label="Khảo sát">
           {{ student.KhaoSat }}
         </td>
-        <td data-label="LePhuc">
+        <td data-label="Lễ Phục">
           {{ student.LePhuc }}
         </td>
         <!-- <td data-label="Progress" class="lg:w-32">

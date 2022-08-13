@@ -39,6 +39,22 @@ const routes = [
   },
   {
     meta: {
+      title: 'Queue'
+    },
+    path: '/queue',
+    name: 'queue',
+    component: () => import('@/views/QueueView.vue')
+  },
+  {
+    meta: {
+      title: 'Finish'
+    },
+    path: '/finish',
+    name: 'finish',
+    component: () => import('@/views/FinishView.vue')
+  },
+  {
+    meta: {
       title: 'Student'
     },
     path: '/student',

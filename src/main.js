@@ -48,7 +48,7 @@ const layoutStore = useLayoutStore(pinia)
 /* Fetch sample data */
 // mainStore.fetch('clients')
 // mainStore.fetch('history')
-// mainStore.fetchData()
+mainStore.fetchData()
 
 /* App style */
 styleStore.setStyle(localStorage[styleKey] ?? 'basic')
