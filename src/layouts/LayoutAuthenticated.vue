@@ -6,6 +6,7 @@ import NavBar from '@/components/NavBar.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import OverlayLayer from '@/components/OverlayLayer.vue'
+import Toast from '@/components/Toast.vue'
 
 const styleStore = useStyleStore()
 
@@ -31,6 +32,7 @@ const overlayClick = () => {
         z-index="z-30"
         @overlay-click="overlayClick"
       />
+      <Toast />
     </div>
   </div>
 </template>

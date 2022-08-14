@@ -92,7 +92,7 @@ const submit = e => {
       v-if="empty"
       class="text-center py-24 text-gray-500 dark:text-slate-400"
     >
-      <p>Nothing's here…</p>
+      <p>Không có dữ liệu …</p>
     </div>
     <div
       v-else

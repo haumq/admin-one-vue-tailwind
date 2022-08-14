@@ -1,6 +1,8 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import { useMainStore } from '@/stores/main.js'
+import FirebaseChangedData from '../src/components/FirebaseChangedData.vue'
+import Toast from '@/components/Toast.vue'
 
 useMainStore().setUser({
   name: 'John Doe',
@@ -11,4 +13,6 @@ useMainStore().setUser({
 
 <template>
   <RouterView />
+  <FirebaseChangedData />
+
 </template>

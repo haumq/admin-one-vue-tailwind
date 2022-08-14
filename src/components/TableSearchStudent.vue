@@ -9,11 +9,12 @@ import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
-import Pagination from "./pagination.vue";
+// import Pagination from "./pagination.vue";
 import ButtonWait from "./ButtonWait.vue";
 import ButtonFinish from "./ButtonFinish.vue";
 import ButtonTransferToWait from "./ButtonTransferToWait.vue";
 import ButtonPropressing from "./ButtonPropressing.vue";
+import CardBox from "@/components/CardBox.vue";
 
 
 defineProps({
@@ -200,11 +201,12 @@ const checked = (isChecked, client) => {
         </td>
         <td data-label="Tên" class="lg:whitespace-nowrap" >
           <p class="font-bold">{{ student.HoTen }}</p>
-            <small class="hidden lg:block">{{ student.NgaySinh }}</small>
+            <!-- <small class="hidden lg:block">{{ new Date(student.NgaySinh).constructor.toString().indexOf("Date") > -1 ? new Date(student.NgaySinh).toLocaleDateString() : student.NgaySinh  }}</small> -->
+            <small class="hidden lg:block">{{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString()  }}</small>
             <small class="hidden lg:block">{{ student.Nganh }}</small >
         </td>
         <td data-label="Ngày Sinh" class="lg:hidden">
-          {{ student.NgaySinh }}
+          {{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString() }}
         </td>
         <td data-label="Ngành" class="lg:hidden">
           {{ student.Nganh }}
@@ -242,12 +244,12 @@ const checked = (isChecked, client) => {
             <ButtonPropressing v-else-if="student.TrangThai == 2" />
             <ButtonFinish v-else-if="student.TrangThai == 3"/>
             <ButtonTransferToWait v-else @click="transferToWait(student.STT)" />
-
           </BaseButtons>
         </td>
       </tr>
     </tbody>
   </table>
+   <CardBox empty v-if="numPages <= 0" />
   <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none">
     <BaseLevel>
       <BaseButtons>

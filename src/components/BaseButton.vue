@@ -101,7 +101,7 @@ const componentClass = computed(() => {
 
 
   if (props.disabled) {
-    base.push('cursor-not-allowed', props.outline ? 'opacity-50' : 'opacity-70')
+    base.push('cursor-not-allowed text-gray-300 dark:text-gray-400', props.outline ? 'opacity-50' : 'opacity-70')
   }
 
   return base

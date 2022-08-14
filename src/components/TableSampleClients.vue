@@ -9,7 +9,7 @@ import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
-import Pagination from "./pagination.vue";
+// import Pagination from "./pagination.vue";
 
 defineProps({
   checkable: Boolean,

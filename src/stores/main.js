@@ -82,6 +82,7 @@ export const useMainStore = defineStore('main', {
           console.log(this.students[payload.row-2])
           // this.students[payload.row-2] = r.data.data[0];
           this.students[payload.row-2].TrangThai = 1;
+          // this.students[payload.row-2].NgayTao = new Date();
           // console.log(this.students[1])
           // this.students
  
