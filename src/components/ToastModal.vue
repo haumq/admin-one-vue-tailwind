@@ -50,10 +50,6 @@ const props = defineProps({
   type: {
     type: String,
     default: 'success'
-  },
-  add: {
-    type: Function,
-    default: 16
   }
 })
 </script>

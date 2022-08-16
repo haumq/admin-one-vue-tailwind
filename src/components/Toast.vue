@@ -120,7 +120,7 @@ const add = computed(() => toastStore.add);
   transition: all 0.5s ease-out;
 }
 .toast-list-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .toast-list-enter-from {
   transform: translateY(100px);
