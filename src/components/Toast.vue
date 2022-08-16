@@ -115,7 +115,10 @@ const add = computed(() => toastStore.add);
   transform: translateX(20px);
   opacity: 0;
 } */
-.toast-list-move,
+.toast-list-move {
+  transition: all 0.9s ease-out;
+}
+
 .toast-list-enter-active {
   transition: all 0.5s ease-out;
 }

@@ -83,7 +83,7 @@ const componentClass = computed(() => {
     'duration-150',
     'border',
     props.roundedFull ? 'rounded-full' : 'rounded',
-    props.active ? 'ring ring-black dark:ring-white' : 'ring-blue-700',
+    props.active ? 'ring ring-black dark:ring-white' : 'ring-gray-500',
     getButtonColor(props.color, props.outline, !props.disabled)
   ]
 

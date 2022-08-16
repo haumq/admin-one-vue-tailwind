@@ -22,6 +22,10 @@ export const useToastStore = defineStore('toast', {
 
       params.created = Date.now();
       params.id = Math.random();
+
+      if(this.toastList.length > 0){
+        params.timeout += this.toastList.length*1
+      }
       params.expire = setTimeout(() => {
           this.remove(params.id);
       }, params.timeout * 1000);

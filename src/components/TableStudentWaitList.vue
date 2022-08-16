@@ -4,6 +4,7 @@ import { useMainStore } from "@/stores/main";
 import { useStyleStore } from "@/stores/style";
 import { mdiEye, mdiTrashCan, mdiArrowRight, mdiChevronRight, mdiChevronLeft} from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
+import SkeletonTable from "@/components/SkeletonTable.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
@@ -12,14 +13,15 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import Pagination from "./pagination.vue";
 import ButtonWait from "./ButtonWait.vue";
 import ButtonFinish from "./ButtonFinish.vue";
-import ButtonTransferToWait from "./ButtonTransferToWait.vue";
+import ButtonHandle from "./ButtonHandle.vue";
+import ButtonDropdown from "./ButtonDropdown.vue";
 import ButtonPropressing from "./ButtonPropressing.vue";
 import CardBox from "@/components/CardBox.vue";
 
 
 defineProps({
   checkable: Boolean,
-  
+
 });
 
 const styleStore = useStyleStore();
@@ -29,18 +31,18 @@ const mainStore = useMainStore();
 const transferToWait =  function(row){
   let payload = { row: row}
   mainStore.transferToWait(payload)
-  } 
+  }
 
 const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const items = computed(() => {
   let students = mainStore.students
   if(transferToWaitListRow.value) {
-   students[transferToWaitListRow.value -2].TrangThai = 1;
-   students[transferToWaitListRow.value -2].NgayTao = new Date();
+   students[transferToWaitListRow.value - 2].TrangThai = 1;
+   students[transferToWaitListRow.value - 2].NgayTao = new Date();
    console.log(students[transferToWaitListRow.value -2])
   }
   students = students.filter(item => item.TrangThai == 1 || item.TrangThai == 2);
-  return students.sort((a, b) => { 
+  return students.sort((a, b) => {
     return new Date(a.NgayTao) - new Date(b.NgayTao);
     // return b.NgayTao - a.NgayTao;
   })
@@ -245,17 +247,19 @@ const checked = (isChecked, client) => {
         </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <ButtonWait v-if="student.TrangThai == 1" />
+            <ButtonHandle  v-if="student.TrangThai == 1"/>
             <ButtonPropressing v-else-if="student.TrangThai == 2" />
             <ButtonFinish v-else-if="student.TrangThai == 3"/>
-            <ButtonTransferToWait v-else @click="transferToWait(student.STT)" />
+            <span v-else>Khác</span>
+            <!-- <ButtonTransferToWait v-else @click="transferToWait(student.STT)" /> -->
 
           </BaseButtons>
         </td>
       </tr>
     </tbody>
   </table>
-        <CardBox empty v-if="numPages <= 0" />
+     <SkeletonTable v-if="numPages <= 0" />
+        <CardBox empty v-if="!numPages" />
   <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none">
     <BaseLevel>
       <BaseButtons>

@@ -2,6 +2,7 @@
 import { mdiCog } from '@mdi/js'
 import { computed, useSlots } from 'vue'
 import BaseIcon from '@/components/BaseIcon.vue'
+import ItemIcon from '@/components/ItemIcon.vue'
 
 const props = defineProps({
   title: {
@@ -92,7 +93,9 @@ const submit = e => {
       v-if="empty"
       class="text-center py-24 text-gray-500 dark:text-slate-400"
     >
-      <p>Không có dữ liệu …</p>
+      <ItemIcon />
+      <p>Chưa có dữ liệu … </p>
+
     </div>
     <div
       v-else
