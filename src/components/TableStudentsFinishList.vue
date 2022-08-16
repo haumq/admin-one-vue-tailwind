@@ -19,7 +19,7 @@ import CardBox from "@/components/CardBox.vue";
 
 defineProps({
   checkable: Boolean,
-  
+
 });
 
 const styleStore = useStyleStore();
@@ -29,7 +29,7 @@ const mainStore = useMainStore();
 const transferToWait =  function(row){
   let payload = { row: row}
   mainStore.transferToWait(payload)
-  } 
+  }
 
 const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const items = computed(() => {
@@ -37,7 +37,11 @@ const items = computed(() => {
   if(transferToWaitListRow.value) {
    students[transferToWaitListRow.value -2].TrangThai = 1;
   }
-  return students.filter(item => item.TrangThai == 3);
+  students = students.filter(item => item.TrangThai == 3);
+  return students.sort((a, b) => {
+    return new Date(a.ThoiGianNhanBang) - new Date(b.ThoiGianNhanBang);
+    // return b.NgayTao - a.NgayTao;
+  })
 }
 );
 
