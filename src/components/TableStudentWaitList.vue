@@ -2,9 +2,17 @@
 import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useStyleStore } from "@/stores/style";
-import { mdiEye, mdiTrashCan, mdiArrowRight, mdiChevronRight, mdiChevronLeft} from "@mdi/js";
+import {
+  mdiEye,
+  mdiTrashCan,
+  mdiArrowRight,
+  mdiChevronRight,
+  mdiChevronLeft,
+  mdiPriorityLow
+} from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import SkeletonTable from "@/components/SkeletonTable.vue";
+import SkeletonHero from "@/components/SkeletonHero.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
@@ -18,38 +26,46 @@ import ButtonDropdown from "./ButtonDropdown.vue";
 import ButtonPropressing from "./ButtonPropressing.vue";
 import CardBox from "@/components/CardBox.vue";
 
-
 defineProps({
   checkable: Boolean,
-
 });
 
 const styleStore = useStyleStore();
 
 const mainStore = useMainStore();
 
-const transferToWait =  function(row){
-  let payload = { row: row}
-  mainStore.transferToWait(payload)
-  }
+const transferToWait = function (row) {
+  let payload = { row: row };
+  mainStore.transferToWait(payload);
+};
+
 
 const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
-const items = computed(() => {
-  let students = mainStore.students
-  if(transferToWaitListRow.value) {
-   students[transferToWaitListRow.value - 2].TrangThai = 1;
-   students[transferToWaitListRow.value - 2].NgayTao = new Date();
-   console.log(students[transferToWaitListRow.value -2])
+const waitList = computed(() => {
+  let students = mainStore.students;
+  if (transferToWaitListRow.value) {
+    students[transferToWaitListRow.value - 2].TrangThai = 1;
+    students[transferToWaitListRow.value - 2].NgayTao = new Date();
+    console.log(students[transferToWaitListRow.value - 2]);
   }
-  students = students.filter(item => item.TrangThai == 1 || item.TrangThai == 2);
+  students = students.filter(
+    (item) => item.TrangThai == 1 || item.TrangThai == 2
+  );
   return students.sort((a, b) => {
     return new Date(a.NgayTao) - new Date(b.NgayTao);
     // return b.NgayTao - a.NgayTao;
-  })
+  });
+});
+const currentStudent = computed(() =>
+{
+  let t = waitList.value.filter(item => item.TrangThai == 1)
+  return t.shift()
 }
 );
-
-
+const items = computed(() => {
+  let t = waitList.value.filter(item => item != currentStudent.value);
+  return t;
+})
 
 const isModalActive = ref(false);
 
@@ -57,25 +73,25 @@ const isModalDangerActive = ref(false);
 
 const perPage = ref(10);
 
-const currentPage = ref(1)
+const currentPage = ref(1);
 
-const prevStep = ref(0)
+const prevStep = ref(0);
 
-const nextStep = ref(0)
+const nextStep = ref(0);
 
 const checkedRows = ref([]);
 
 const itemsPaginated = computed(() =>
   items.value.slice(
     perPage.value * (currentPage.value - 1),
-    perPage.value * (currentPage.value)
+    perPage.value * currentPage.value
   )
 );
 const nextPage = computed(() =>
- currentPage.value < numPages.value ? currentPage.value + 1 : numPages.value
+  currentPage.value < numPages.value ? currentPage.value + 1 : numPages.value
 );
 const prevPage = computed(() =>
- currentPage.value > 1 ? currentPage.value - 1 : 1
+  currentPage.value > 1 ? currentPage.value - 1 : 1
 );
 
 const numPages = computed(() => Math.ceil(items.value.length / perPage.value));
@@ -101,38 +117,45 @@ const pagesList = computed(() => {
   //   pagesList.push(i)
   // }
 
-  if(numPages.value <= 7){
+  if (numPages.value <= 7) {
     for (let i = 1; i <= numPages.value; i++) {
-    pagesList.push(i);
-     }
-  }else {
-    currentPage.value > 3 ? prevStep.value = 2 : prevStep.value = (currentPage.value - 1);
-    currentPage.value < numPages.value - 2 ? nextStep.value = 2 : nextStep.value = (numPages.value - currentPage.value) ;
+      pagesList.push(i);
+    }
+  } else {
+    currentPage.value > 3
+      ? (prevStep.value = 2)
+      : (prevStep.value = currentPage.value - 1);
+    currentPage.value < numPages.value - 2
+      ? (nextStep.value = 2)
+      : (nextStep.value = numPages.value - currentPage.value);
     // prevStep.value < 0 ? prevStep.value = 0 : prevStep.value = prevStep.value;
     // nextStep.value < 0 ? nextStep.value = 0 : nextStep.value = nextStep.value;
-    (nextStep.value = prevStep.value < 2 ? nextStep.value + (2 - prevStep.value) : nextStep.value)
-    prevStep.value = nextStep.value < 2 ? prevStep.value + (2 - nextStep.value) : prevStep.value
+    nextStep.value =
+      prevStep.value < 2
+        ? nextStep.value + (2 - prevStep.value)
+        : nextStep.value;
+    prevStep.value =
+      nextStep.value < 2
+        ? prevStep.value + (2 - nextStep.value)
+        : prevStep.value;
     // if(currentPage < 4 && numPages.value > 7) {
     //   nextStep.value = currentPage
     // }
     console.log(prevStep.value);
     console.log(nextStep.value);
 
-
     for (let i = prevStep.value; i > 0; i--) {
-    pagesList.push(currentPage.value - i);
-     }
+      pagesList.push(currentPage.value - i);
+    }
     pagesList.push(currentPage.value);
 
     for (let i = 0; i < nextStep.value; i++) {
-    pagesList.push(currentPage.value + i + 1);
-     }
-
+      pagesList.push(currentPage.value + i + 1);
+    }
   }
 
-  return pagesList
-})
-
+  return pagesList;
+});
 
 const remove = (arr, cb) => {
   const newArr = [];
@@ -169,6 +192,124 @@ const checked = (isChecked, client) => {
     <p>This is sample modal</p>
   </CardBoxModal>
 
+  <section
+    class="flex flex-col lg:flex-row p-2 mb-4 w-full bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700 " v-if="currentStudent">
+    <div class="px-2 lg:w-2/3" >
+      <h4 class="mb-5 text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center drop-shadow-lg"  >
+        {{ currentStudent.HoTen }}
+      </h4>
+      <h5 class="mb-5 text-xl md:text-3xl lg:text-5xl font-bold text-gray-700 dark:text-gray-200 text-center drop-shadow-lg">
+        {{ currentStudent.SoVaoSo }}
+      </h5>
+
+      <div class="flex flex-col md:flex-row mt-5 mb-5">
+        <div class="md:w-1/2">
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            MSSV: {{ currentStudent.MSSV }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Ngày sinh: {{
+              new Date(currentStudent.NgaySinh).toLocaleDateString() == "Invalid Date"
+                ? currentStudent.NgaySinh
+                : new Date(currentStudent.NgaySinh).toLocaleDateString("vi", { dateStyle: 'short' })
+          }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Ngành: {{ currentStudent.Nganh }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Xếp Loại: {{ currentStudent.XepLoai }}
+          </p>
+
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Điện thoại: {{ currentStudent.DienThoai }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Email: {{ currentStudent.Email }}
+          </p>
+        </div>
+        <div>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Số hiệu bằng: {{ currentStudent.SoHieuBang }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            GDQP: {{ currentStudent.GDQP }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Thiếu HS, HP: {{ currentStudent.ThieuHSHP }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Khảo sát: {{ currentStudent.KhaoSat }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Lễ phục: {{ currentStudent.LePhuc }}
+          </p>
+          <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Thời gian: {{  new Date(currentStudent.NgayTao).toLocaleString() == "Invalid Date"
+                ? currentStudent.NgayTao
+                : new Date(currentStudent.NgayTao).toLocaleString("vi")}}
+          </p>
+        </div>
+      </div>
+
+      <div class="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4"></div>
+    </div>
+
+      <div class="lg:w-1/3 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+        <div class="relative">
+          <img class="rounded-t-lg" src="public/image-2.jpg"  alt="" />
+          <span class="sticker absolute text-9xl text-white font-bold left-1/2 top-1/2 -translate-x-2/4 -translate-y-2/4 drop-shadow-lg">
+            {{ currentStudent.STT }}
+          </span>
+        </div>
+        <div class="p-5">
+          <BaseButtons type="justify-center lg:justify-around mb-5" no-wrap >
+           <ButtonHandle v-if="currentStudent.TrangThai == 1" />
+           <ButtonPropressing v-else-if="currentStudent.TrangThai == 2" />
+           <ButtonFinish v-else-if="currentStudent.TrangThai == 3" />
+           <span v-else>Khác</span>
+         </BaseButtons>
+
+            <h5 class="mb-5 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              Noteworthy technology
+            </h5>
+            <BaseButtons type="justify-center mb-5" no-wrap >
+            <BaseButton
+              color="info"
+              :icon="mdiEye"
+              small
+              data-tooltip-target="tooltip-default"
+              @click="isModalActive = true"
+
+            />
+
+            <BaseButton
+              color="info"
+              :icon="mdiEye"
+              small
+              @click="isModalActive = true"
+            />
+            <BaseButton
+              color="info"
+              :icon="mdiEye"
+              small
+              @click="isModalActive = true"
+            />
+            <BaseButton
+              color="danger"
+              :icon="mdiTrashCan"
+              small
+              @click="isModalDangerActive = true"
+            />
+            </BaseButtons>
+
+
+
+        </div>
+      </div>
+  </section>
+  <SkeletonHero v-if="!currentStudent" />
+
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
     <span v-for="checkedRow in checkedRows" :key="checkedRow.id"
       class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700">
@@ -196,24 +337,32 @@ const checked = (isChecked, client) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="student in itemsPaginated" :key="student.MSSV"  >
+      <tr v-for="student in itemsPaginated" :key="student.MSSV">
         <TableCheckboxCell v-if="checkable" @checked="checked($event, student)" />
         <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td> -->
-          <td data-label="STT">
-            {{ student.STT - 1 }}
-          </td>
+        <td data-label="STT">
+          {{ student.STT - 1 }}
+        </td>
         <td data-label="MSSV">
           {{ student.MSSV }}
         </td>
-        <td data-label="Tên" class="lg:whitespace-nowrap" >
+        <td data-label="Tên" class="lg:whitespace-nowrap">
           <p class="font-bold">{{ student.HoTen }}</p>
-            <small class="hidden lg:block">{{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString() }}</small>
-            <small class="hidden lg:block">{{ student.Nganh }}</small >
+          <small class="hidden lg:block">{{
+              new Date(student.NgaySinh).toLocaleDateString() == "Invalid Date"
+                ? student.NgaySinh
+                : new Date(student.NgaySinh).toLocaleDateString("vi", { dateStyle: 'short' })
+          }}</small>
+          <small class="hidden lg:block">{{ student.Nganh }}</small>
         </td>
         <td data-label="Ngày Sinh" class="lg:hidden">
-          {{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString() }}
+          {{
+              new Date(student.NgaySinh).toLocaleDateString() == "Invalid Date"
+                ? student.NgaySinh
+                : new Date(student.NgaySinh).toLocaleDateString()
+          }}
         </td>
         <td data-label="Ngành" class="lg:hidden">
           {{ student.Nganh }}
@@ -246,71 +395,57 @@ const checked = (isChecked, client) => {
           <small class="text-gray-500 dark:text-slate-400" :title="student.NgayTao">{{ student.NgayTao }}</small>
         </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
-          <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <ButtonHandle  v-if="student.TrangThai == 1"/>
+          <BaseButtons type="justify-end" no-wrap>
+            <span v-if="student.TrangThai == 1">
+
+            <BaseButton
+              color="info"
+              :icon="mdiPriorityLow"
+              small
+              @click="isModalActive = true"
+            />
+            <BaseButton
+              color="danger"
+              :icon="mdiTrashCan"
+              small
+              @click="isModalDangerActive = true"
+            />
+            </span>
+
+            <!-- <ButtonHandle v-if="student.TrangThai == 1" /> -->
+
             <ButtonPropressing v-else-if="student.TrangThai == 2" />
-            <ButtonFinish v-else-if="student.TrangThai == 3"/>
+            <ButtonFinish v-else-if="student.TrangThai == 3" />
             <span v-else>Khác</span>
             <!-- <ButtonTransferToWait v-else @click="transferToWait(student.STT)" /> -->
-
           </BaseButtons>
         </td>
       </tr>
     </tbody>
   </table>
-     <SkeletonTable v-if="numPages <= 0" />
-        <CardBox empty v-if="!numPages" />
+  <SkeletonTable v-if="numPages <= 0" />
+  <CardBox empty v-if="!numPages" />
   <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none">
     <BaseLevel>
       <BaseButtons>
-
-        <BaseButton
-          v-if="numPages > 0"
-          :disabled="currentPage === 1"
-          :icon="mdiChevronLeft"
-          small
-          :outline="styleStore.darkMode"
-          @click="currentPage = prevPage"
-        />
-        <BaseButton
-          v-if="currentPage > 3"
-          :active="currentPage == 1"
-          :label="1"
-          small
-          :outline="styleStore.darkMode"
-          @click="currentPage = 1"
-        />
+        <BaseButton v-if="numPages > 0" :disabled="currentPage === 1" :icon="mdiChevronLeft" small
+          :outline="styleStore.darkMode" @click="currentPage = prevPage" />
+        <BaseButton v-if="currentPage > 3" :active="currentPage == 1" :label="1" small :outline="styleStore.darkMode"
+          @click="currentPage = 1" />
         <span v-if="currentPage > 4">...</span>
-        <BaseButton
-          v-for="page in pagesList"
-          :key="page"
-          :active="page === currentPage"
-          :label="page"
-          small
-          :outline="styleStore.darkMode"
-          @click="currentPage = page"
-        />
-         <span v-if="currentPage < numPages - 3">...</span>
-        <BaseButton
-          v-if="currentPage < numPages - 2"
-          :active="currentPage == numPages"
-          :label="numPages"
-          small
-          :outline="styleStore.darkMode"
-          @click="currentPage = numPages"
-        />
-        <BaseButton
-          v-if="numPages > 0"
-          :disabled="currentPage === numPages"
-          :icon="mdiChevronRight"
-          small
-          :outline="styleStore.darkMode"
-          @click="currentPage = nextPage"
-        />
-
+        <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page" small
+          :outline="styleStore.darkMode" @click="currentPage = page" />
+        <span v-if="currentPage < numPages - 3">...</span>
+        <BaseButton v-if="currentPage < numPages - 2" :active="currentPage == numPages" :label="numPages" small
+          :outline="styleStore.darkMode" @click="currentPage = numPages" />
+        <BaseButton v-if="numPages > 0" :disabled="currentPage === numPages" :icon="mdiChevronRight" small
+          :outline="styleStore.darkMode" @click="currentPage = nextPage" />
       </BaseButtons>
       <small v-if="numPages > 0">Page {{ currentPageHuman }} of {{ numPages }}</small>
     </BaseLevel>
     <!-- <Pagination /> -->
   </div>
 </template>
+<style scoped>
+
+</style>

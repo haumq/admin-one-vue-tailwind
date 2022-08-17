@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+// import directives from "./directives";
 import { useMainStore } from '@/stores/main.js'
 import { useStyleStore } from '@/stores/style.js'
 import { useLayoutStore } from '@/stores/layout.js'
@@ -10,7 +11,7 @@ import { darkModeKey, styleKey } from '@/config.js'
 
 import './css/main.css'
 
-// 
+//
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -36,6 +37,8 @@ const analytics = getAnalytics(FirebseApp);
 
 /* Init Pinia */
 const pinia = createPinia()
+/* Init Directives*/
+// directives(App);
 
 /* Create Vue app */
 createApp(App).use(router).use(pinia).mount('#app')
