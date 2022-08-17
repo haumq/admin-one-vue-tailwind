@@ -48,6 +48,24 @@ const mainStore = useMainStore(pinia)
 const styleStore = useStyleStore(pinia)
 const layoutStore = useLayoutStore(pinia)
 
+/* Axios */
+import axios from 'axios'
+
+axios.interceptors.request.use(config => {
+    mainStore.apiLoading = true;
+    return config;
+});
+axios.interceptors.response.use(
+        response => {
+            mainStore.apiLoading = false;
+            return Promise.resolve(response);
+        },
+        error => {
+            mainStore.apiLoading = false;
+            return Promise.reject(error);
+        }
+    );
+
 /* Fetch sample data */
 // mainStore.fetch('clients')
 // mainStore.fetch('history')

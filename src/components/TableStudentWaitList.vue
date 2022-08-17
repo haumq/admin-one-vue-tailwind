@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onBeforeUnmount, onMounted } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useStyleStore } from "@/stores/style";
 import {
@@ -18,7 +18,7 @@ import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
-import Pagination from "./pagination.vue";
+// import Pagination from "./pagination.vue";
 import ButtonWait from "./ButtonWait.vue";
 import ButtonFinish from "./ButtonFinish.vue";
 import ButtonHandle from "./ButtonHandle.vue";
@@ -70,6 +70,8 @@ const items = computed(() => {
 const isModalActive = ref(false);
 
 const isModalDangerActive = ref(false);
+
+const isloading = computed(() => mainStore.apiLoading)
 
 const perPage = ref(10);
 
@@ -141,8 +143,8 @@ const pagesList = computed(() => {
     // if(currentPage < 4 && numPages.value > 7) {
     //   nextStep.value = currentPage
     // }
-    console.log(prevStep.value);
-    console.log(nextStep.value);
+    // console.log(prevStep.value);
+    // console.log(nextStep.value);
 
     for (let i = prevStep.value; i > 0; i--) {
       pagesList.push(currentPage.value - i);
@@ -179,6 +181,36 @@ const checked = (isChecked, client) => {
     );
   }
 };
+
+const keyEnterHook = e => {
+    if (e.ctrlKey && e.key === 'i') {
+      e.preventDefault()
+      // inputEl.value.focus()
+      console.log("Enter")
+      alert("Enter");
+    } else if (e.key === 'Escape') {
+      console.log("Escape")
+    }
+  }
+  const test = function(){
+    alert("test");
+  }
+
+  onMounted(() => {
+    console.log("onMounted keyEnterHook")
+    if (!mainStore.isFieldFocusRegistered) {
+      window.addEventListener('keydown', keyEnterHook)
+      mainStore.isKeyEnterRegistered = true
+    } else {
+      // console.error('Duplicate field focus event')
+    }
+  })
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('keydown', keyEnterHook)
+    mainStore.isKeyEnterRegistered = false
+  })
+
 </script>
 
 <template>
@@ -222,7 +254,7 @@ const checked = (isChecked, client) => {
           </p>
 
           <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
-            Điện thoại: {{ currentStudent.DienThoai }}
+            Điện thoại: {{ currentStudent.DienThoai.toLocaleString('vi', {minimumIntegerDigits: 10, useGrouping:false}) }}
           </p>
           <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
             Email: {{ currentStudent.Email }}
@@ -257,7 +289,7 @@ const checked = (isChecked, client) => {
 
       <div class="lg:w-1/3 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
         <div class="relative">
-          <img class="rounded-t-lg" src="public/image-2.jpg"  alt="" />
+          <img class="rounded-t-lg w-full" src="public/image-2.jpg"  alt="" />
           <span class="sticker absolute text-9xl text-white font-bold left-1/2 top-1/2 -translate-x-2/4 -translate-y-2/4 drop-shadow-lg">
             {{ currentStudent.STT }}
           </span>
@@ -279,7 +311,7 @@ const checked = (isChecked, client) => {
               :icon="mdiEye"
               small
               data-tooltip-target="tooltip-default"
-              @click="isModalActive = true"
+              @keyup.enter="alert('test')"
 
             />
 
@@ -308,8 +340,9 @@ const checked = (isChecked, client) => {
         </div>
       </div>
   </section>
-  <SkeletonHero v-if="!currentStudent" />
-
+  <SkeletonHero v-if="isloading" />
+  <!-- <SkeletonHero  /> -->
+  <CardBox empty v-if="!isloading && !currentStudent" />
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
     <span v-for="checkedRow in checkedRows" :key="checkedRow.id"
       class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700">
@@ -422,9 +455,10 @@ const checked = (isChecked, client) => {
         </td>
       </tr>
     </tbody>
+    <SkeletonTable :buttonSkeleton="'queue'" v-if="isloading" />
   </table>
-  <SkeletonTable v-if="numPages <= 0" />
-  <CardBox empty v-if="!numPages" />
+  
+  <CardBox empty v-if="!isloading && numPages <= 0" />
   <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none">
     <BaseLevel>
       <BaseButtons>

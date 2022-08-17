@@ -1,41 +1,57 @@
-<template>
-  <div role="status"
-    class="p-4 space-y-4 w-full rounded border border-gray-200 divide-y divide-gray-200 shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700">
-    <div class="flex justify-between items-center">
-      <div>
-        <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-        <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-      </div>
-      <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-    </div>
-    <div class="flex justify-between items-center pt-4">
-      <div>
-        <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-        <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-      </div>
-      <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-    </div>
-    <div class="flex justify-between items-center pt-4">
-      <div>
-        <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-        <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-      </div>
-      <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-    </div>
-    <div class="flex justify-between items-center pt-4">
-      <div>
-        <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-        <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-      </div>
-      <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-    </div>
-    <div class="flex justify-between items-center pt-4">
-      <div>
-        <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-        <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-      </div>
-      <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-    </div>
-    <span class="sr-only">Loading...</span>
-  </div>
+<template :buttonSkeleton="buttonSkeleton">
+      <!-- <thead role="status"
+    class="mt-6 space-y-4 w-full rounded divide-y divide-gray-100 shadow-lg animate-pulse dark:divide-gray-700 md:hidden" >
+      <tr >        
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th class="lg:hidden"><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th class="lg:hidden"><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+        <th><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></th>
+      </tr>
+    </thead > -->
+      <tbody role="status"
+    class="mt-6 space-y-4 w-full rounded divide-y divide-gray-100 shadow-lg animate-pulse dark:divide-gray-700">
+       <tr v-for="i in total" :key="i">
+        <td><div class="h-5 w-4 bg-gray-300 rounded-full dark:bg-gray-600 mb-2.5"></div></td>
+        <td><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></td>
+        <td><div>
+        <div class="h-4 bg-gray-300 rounded-full dark:bg-gray-600 w-52 mb-2.5"></div>
+        <div class="h-4 w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+        <div class="h-4 w-36 h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+      </div></td>
+        <td class="lg:hidden"><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></td>
+        <td class="lg:hidden"><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></td>
+        <td class="whitespace-nowrap"><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-24"></div></td>
+        <td><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-24"></div></td>
+        <td><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-24"></div></td>
+        <td><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></td>
+        <td><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></td>
+        <td v-if="i == 1"><div class="h-8 mx-auto bg-gray-300 rounded-lg dark:bg-gray-700 w-24"></div></td>
+        <td class="flex flex-row justify-end" v-else-if="buttonSkeleton == 'queue'">
+        <!-- <div > -->
+            <div class="h-8 w-8 m-1.5 bg-gray-300 rounded-md dark:bg-gray-700"></div>
+            <div class="h-8 w-8 m-1.5 bg-gray-300 rounded-md dark:bg-gray-700"></div>
+        <!-- </div>           -->
+        </td>
+        <td v-else><div class="h-8 mx-auto bg-gray-300 rounded-lg dark:bg-gray-700 w-24"></div></td>
+        <!-- <th /> -->
+        </tr>
+      </tbody>
 </template>
+<script setup>
+  import { computed, ref } from "vue";
+  const props = defineProps({
+  buttonSkeleton: {
+    type: String,
+    default: 'search'
+  }
+  })
+
+  const total = ref(10)
+</script>

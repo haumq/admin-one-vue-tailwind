@@ -15,6 +15,7 @@ import ButtonFinish from "./ButtonFinish.vue";
 import ButtonTransferToWait from "./ButtonTransferToWait.vue";
 import ButtonPropressing from "./ButtonPropressing.vue";
 import CardBox from "@/components/CardBox.vue";
+import SkeletonTable from "@/components/SkeletonTable.vue";
 
 
 defineProps({
@@ -46,6 +47,8 @@ const items = computed(() => {
 const isModalActive = ref(false);
 
 const isModalDangerActive = ref(false);
+
+const isloading = computed(() => mainStore.apiLoading)
 
 const perPage = ref(10);
 
@@ -107,8 +110,8 @@ const pagesList = computed(() => {
     // if(currentPage < 4 && numPages.value > 7) {
     //   nextStep.value = currentPage
     // }
-    console.log(prevStep.value);
-    console.log(nextStep.value);
+    // console.log(prevStep.value);
+    // console.log(nextStep.value);
 
 
     for (let i = prevStep.value; i > 0; i--) {
@@ -248,8 +251,9 @@ const checked = (isChecked, client) => {
         </td>
       </tr>
     </tbody>
+  <SkeletonTable v-if="isloading" />
   </table>
-   <CardBox empty v-if="numPages <= 0" />
+  <CardBox empty v-if="!isloading && numPages <= 0" />
   <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none">
     <BaseLevel>
       <BaseButtons>

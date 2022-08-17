@@ -11,9 +11,11 @@ export const useMainStore = defineStore('main', {
 
     urlApi: 'https://script.google.com/macros/s/AKfycbwR4DSX3Y3-1C7Xis1uzBYuvgo4jn1HZ_f7WwRnd9bBD1GskKaEkm7CiH9mGdzCN13P/exec',
     keyApi: '?key=AIzaSyAEzVpmZDCzC2e5Iz6gJaF-EGLoWc-xfXU',
+    apiLoading: false,
 
     /* Field focus with ctrl+k (to register only once) */
     isFieldFocusRegistered: false,
+    isKeyEnterRegistered: false,
 
     /* Sample data (commonly used) */
     clients: [],
