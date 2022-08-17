@@ -455,7 +455,7 @@ const keyEnterHook = e => {
         </td>
       </tr>
     </tbody>
-    <SkeletonTable :buttonSkeleton="'queue'" v-if="isloading" />
+    <SkeletonTable :buttonSkeleton="'queue'" v-if="isloading && numPages <= 0" />
   </table>
   
   <CardBox empty v-if="!isloading && numPages <= 0" />

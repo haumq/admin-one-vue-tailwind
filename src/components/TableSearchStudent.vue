@@ -251,7 +251,7 @@ const checked = (isChecked, client) => {
         </td>
       </tr>
     </tbody>
-  <SkeletonTable v-if="isloading" />
+  <SkeletonTable v-if="isloading && numPages <= 0" />
   </table>
   <CardBox empty v-if="!isloading && numPages <= 0" />
   <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none">
