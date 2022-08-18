@@ -4,7 +4,7 @@ import { computed } from 'vue'
 </script>
 
 <template>
-  <button disabled type="button" class="btn-processing pulse focus:outline-none text-white bg-green-500 hover:bg-green-600 dark:bg-green-900 font-medium rounded-lg text-sm px-2.5 py-2 mr-2 mb-2">
+  <button type="button" class="btn-processing pulse focus:outline-none text-white bg-green-500 hover:bg-green-600 dark:bg-green-900 font-medium rounded-lg text-sm px-2.5 py-2 mr-2 mb-2">
     <span class="loading text-left">Đang xử lý </span>
 </button>
 </template>

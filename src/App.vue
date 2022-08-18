@@ -5,9 +5,9 @@ import FirebaseChangedData from '../src/components/FirebaseChangedData.vue'
 import Toast from '@/components/Toast.vue'
 
 useMainStore().setUser({
-  name: 'John Doe',
-  email: 'john@example.com',
-  avatar: 'https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93'
+  name: 'Hậu MQ',
+  email: 'haumq@uef.edu.vn',
+  avatar: 'https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=91'
 })
 </script>
 

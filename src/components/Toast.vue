@@ -53,19 +53,19 @@
   </div> -->
       <TransitionGroup name="toast-list" tag="ul">
         <li v-for="item in toastList" :key="item">
-          <ToastModal />
+          <ToastModal :body="item.body" />
         </li>
       </TransitionGroup>
     <Transition name="slide-fade">
       <p v-if="show">hello</p>
     </Transition>
   </section>
-      <button @click="show = !show">Toggle</button>
+      <!-- <button @click="show = !show">Toggle</button>
       <button
         @click="this.add({ title: 'title', body: 'this is a toast ', timeout: 5 })"
       >
         Toggle 2
-      </button>
+      </button> -->
 </template>
 
 <script setup>

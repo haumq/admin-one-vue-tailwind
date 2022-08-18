@@ -18,7 +18,6 @@ import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
-// import Pagination from "./pagination.vue";
 import ButtonWait from "./ButtonWait.vue";
 import ButtonFinish from "./ButtonFinish.vue";
 import ButtonHandle from "./ButtonHandle.vue";
@@ -33,21 +32,18 @@ defineProps({
 const styleStore = useStyleStore();
 
 const mainStore = useMainStore();
+const userEmail = computed(() => mainStore.userEmail)
 
 const transferToWait = function (row) {
   let payload = { row: row };
   mainStore.transferToWait(payload);
 };
+const transferToProcess =  (payload) => mainStore.transferToProcess(payload);
+const transferToFisnish =  (payload) => mainStore.transferToFisnish(payload);
 
-
-const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
+// const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const waitList = computed(() => {
   let students = mainStore.students;
-  if (transferToWaitListRow.value) {
-    students[transferToWaitListRow.value - 2].TrangThai = 1;
-    students[transferToWaitListRow.value - 2].NgayTao = new Date();
-    console.log(students[transferToWaitListRow.value - 2]);
-  }
   students = students.filter(
     (item) => item.TrangThai == 1 || item.TrangThai == 2
   );
@@ -58,7 +54,9 @@ const waitList = computed(() => {
 });
 const currentStudent = computed(() =>
 {
-  let t = waitList.value.filter(item => item.TrangThai == 1)
+  let t = waitList.value.filter(item => (item.TrangThai == 1 || (item.TrangThai == 2 && (item.NguoiXuLy == '' || item.NguoiXuLy == userEmail.value))))
+  // console.log(t)
+  // console.log(userEmail.value)
   return t.shift()
 }
 );
@@ -296,8 +294,8 @@ const keyEnterHook = e => {
         </div>
         <div class="p-5">
           <BaseButtons type="justify-center lg:justify-around mb-5" no-wrap >
-           <ButtonHandle v-if="currentStudent.TrangThai == 1" />
-           <ButtonPropressing v-else-if="currentStudent.TrangThai == 2" />
+           <ButtonHandle v-if="currentStudent.TrangThai == 1" @click="transferToProcess(currentStudent.Row)" />
+           <ButtonPropressing v-else-if="currentStudent.TrangThai == 2" @click="transferToFisnish(currentStudent.Row)" />
            <ButtonFinish v-else-if="currentStudent.TrangThai == 3" />
            <span v-else>Khác</span>
          </BaseButtons>
@@ -340,7 +338,7 @@ const keyEnterHook = e => {
         </div>
       </div>
   </section>
-  <SkeletonHero v-if="isloading" />
+  <SkeletonHero v-if="isloading && !currentStudent" />
   <!-- <SkeletonHero  /> -->
   <CardBox empty v-if="!isloading && !currentStudent" />
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
@@ -370,13 +368,13 @@ const keyEnterHook = e => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="student in itemsPaginated" :key="student.MSSV">
+      <tr v-for="student in itemsPaginated" :key="student">
         <TableCheckboxCell v-if="checkable" @checked="checked($event, student)" />
         <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td> -->
         <td data-label="STT">
-          {{ student.STT - 1 }}
+          {{ student.STT }}
         </td>
         <td data-label="MSSV">
           {{ student.MSSV }}
@@ -457,7 +455,7 @@ const keyEnterHook = e => {
     </tbody>
     <SkeletonTable :buttonSkeleton="'queue'" v-if="isloading && numPages <= 0" />
   </table>
-  
+
   <CardBox empty v-if="!isloading && numPages <= 0" />
   <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none">
     <BaseLevel>

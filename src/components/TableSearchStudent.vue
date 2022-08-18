@@ -9,7 +9,6 @@ import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
-// import Pagination from "./pagination.vue";
 import ButtonWait from "./ButtonWait.vue";
 import ButtonFinish from "./ButtonFinish.vue";
 import ButtonTransferToWait from "./ButtonTransferToWait.vue";
@@ -20,24 +19,21 @@ import SkeletonTable from "@/components/SkeletonTable.vue";
 
 defineProps({
   checkable: Boolean,
-  
+
 });
 
 const styleStore = useStyleStore();
 
 const mainStore = useMainStore();
 
-const transferToWait =  function(row){
-  let payload = { row: row}
-  mainStore.transferToWait(payload)
-  } 
+const transferToWait = (payload) => mainStore.transferToWait(payload);
 
-const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
+// const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const items = computed(() => {
   let students = mainStore.students
-  if(transferToWaitListRow.value) {
-   students[transferToWaitListRow.value -2].TrangThai = 1;
-  }
+  // if(transferToWaitListRow.value) {
+  //  students[transferToWaitListRow.value -2].TrangThai = 1;
+  // }
   return students;
 }
 );
@@ -191,13 +187,13 @@ const checked = (isChecked, client) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="student in itemsPaginated" :key="student.MSSV"  >
+      <tr v-for="student in itemsPaginated" :key="student.Row"  >
         <TableCheckboxCell v-if="checkable" @checked="checked($event, student)" />
         <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td> -->
           <td data-label="STT">
-            {{ student.STT - 1 }}
+            {{ student.STT }}
           </td>
         <td data-label="MSSV">
           {{ student.MSSV }}
@@ -246,7 +242,7 @@ const checked = (isChecked, client) => {
             <ButtonWait v-if="student.TrangThai == 1" />
             <ButtonPropressing v-else-if="student.TrangThai == 2" />
             <ButtonFinish v-else-if="student.TrangThai == 3"/>
-            <ButtonTransferToWait v-else @click="transferToWait(student.STT)" />
+            <ButtonTransferToWait v-else @click="transferToWait(student.Row)" />
           </BaseButtons>
         </td>
       </tr>

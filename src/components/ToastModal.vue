@@ -21,7 +21,8 @@
       <span class="sr-only">Check icon</span>
     </div>
     <div class="ml-3 text-sm font-normal">
-      Item moved successfully Item moved successfully .
+      {{ body }}
+      <!-- Item moved successfully Item moved successfully . -->
     </div>
     <button
       type="button"
@@ -50,6 +51,14 @@ const props = defineProps({
   type: {
     type: String,
     default: 'success'
+  },
+  title: {
+    type: String,
+    default: 'title'
+  },
+  body: {
+    type: String,
+    default: 'body'
   }
 })
 </script>

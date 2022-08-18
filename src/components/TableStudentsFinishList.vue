@@ -195,13 +195,13 @@ const checked = (isChecked, client) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="student in itemsPaginated" :key="student.MSSV"  >
+      <tr v-for="student in itemsPaginated" :key="student.Row"  >
         <TableCheckboxCell v-if="checkable" @checked="checked($event, student)" />
         <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td> -->
           <td data-label="STT">
-            {{ student.STT - 1 }}
+            {{ student.STT }}
           </td>
         <td data-label="MSSV">
           {{ student.MSSV }}
