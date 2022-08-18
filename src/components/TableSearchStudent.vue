@@ -26,11 +26,16 @@ const styleStore = useStyleStore();
 
 const mainStore = useMainStore();
 
+const searchKey = computed(() => mainStore.searchKey)
+console.log(searchKey.value)
+
 const transferToWait = (payload) => mainStore.transferToWait(payload);
 
 // const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const items = computed(() => {
-  let students = mainStore.students
+  let students = mainStore.students.filter(item => item.HoTen.toString().toLocaleLowerCase().includes(searchKey.value.toString().toLocaleLowerCase()) || 
+  item.MSSV.toString().toLocaleLowerCase().includes(searchKey.value.toString().toLocaleLowerCase())
+  )
   // if(transferToWaitListRow.value) {
   //  students[transferToWaitListRow.value -2].TrangThai = 1;
   // }

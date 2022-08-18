@@ -15,6 +15,9 @@ const changeDataList = ref(db, 'changeDataList');
 const changeWaitList = ref(db, 'changeWaitList');
 const changeProcessingList = ref(db, 'changeProcessingList');
 const changeFinishList = ref(db, 'changeFinishList');
+const changeLastQueue = ref(db, 'changeLastQueue');
+const changeOldPositionQueue = ref(db, 'changeOldPositionQueue');
+const changeRemoveFromQueue = ref(db, 'changeRemoveFromQueue');
 // const a = ref('changed')
 // onValue(starCountRef, (snapshot) => {
 //   const data = snapshot.val();
@@ -23,7 +26,7 @@ const changeFinishList = ref(db, 'changeFinishList');
 onChildChanged(changeDataList, (snapshot) => {
     const data = snapshot.val();
     mainStore.fetchData()
-    toastStore.add({ title: 'title', body: 'Data có sự thay đổi dữ liệu!', timeout: 10 });
+    toastStore.add({ title: 'title', body: 'Data dữ liệu có sự thay đổi, đã cập nhật!', timeout: 10 });
   });
 onChildChanged(changeWaitList, (snapshot) => {
   // console.log("refresh page");
@@ -38,7 +41,7 @@ onChildChanged(changeWaitList, (snapshot) => {
     toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' được thêm vào hàng chờ!', timeout: 5 });
 });
 onChildChanged(changeProcessingList, (snapshot) => {
-    let data = {};
+    let data;
     onValue(changeProcessingList, (val) => {
       data = val.val();
     });
@@ -49,7 +52,7 @@ onChildChanged(changeProcessingList, (snapshot) => {
   }
 });
 onChildChanged(changeFinishList, (snapshot) => {
-    let data = {};
+    let data;
     onValue(changeFinishList, (val) => {
       data = val.val();
     });

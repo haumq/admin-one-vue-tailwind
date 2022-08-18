@@ -100,6 +100,10 @@ if (props.ctrlKFocus) {
       inputEl.value.focus()
     } else if (e.key === 'Escape') {
       inputEl.value.blur()
+    } else if (e.keyCode === 113) {
+      e.preventDefault()
+      inputEl.value.focus()
+      mainStore.setSearchKeyEmpty()
     }
   }
 

@@ -8,7 +8,10 @@ import {
   mdiArrowRight,
   mdiChevronRight,
   mdiChevronLeft,
-  mdiPriorityLow
+  mdiPriorityLow,
+  mdiPriorityHigh,
+  mdiSpeakerPlay,
+  mdiClockIn
 } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import SkeletonTable from "@/components/SkeletonTable.vue";
@@ -40,6 +43,9 @@ const transferToWait = function (row) {
 };
 const transferToProcess =  (payload) => mainStore.transferToProcess(payload);
 const transferToFisnish =  (payload) => mainStore.transferToFisnish(payload);
+const transferToLastQueue =  (payload) => mainStore.transferToLastQueue(payload);
+const transferToOldPositionQueue =  (payload) => mainStore.transferToOldPositionQueue(payload);
+const removeFromQueue =  (payload) => mainStore.removeFromQueue(payload);
 
 // const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const waitList = computed(() => {
@@ -181,22 +187,61 @@ const checked = (isChecked, client) => {
 };
 
 const keyEnterHook = e => {
-    if (e.ctrlKey && e.key === 'i') {
+    if (e.key === 'Enter') {
+      // e.preventDefault()
+        // console.log(currentStudent.value.TrangThai)
+      if(currentStudent.value.TrangThai === 1){
+        transferToProcess(currentStudent.value.Row)
+        // alert("Enter");
+      }
+    } else if (e.key === ' ' || e.key === 'Spacebar') {
       e.preventDefault()
-      // inputEl.value.focus()
-      console.log("Enter")
-      alert("Enter");
-    } else if (e.key === 'Escape') {
-      console.log("Escape")
+      if(currentStudent.value.TrangThai === 2){
+        transferToFisnish(currentStudent.value.Row)
+        // console.log("Enter")
+        // alert("Enter");
+      }
+      // console.log("Escape")
+    } else if (e.keyCode === 120) {
+      e.preventDefault()
+      if(currentStudent.value){
+      const text = `Mời bạn ${currentStudent.value.HoTen}, đến quầy số 1, để nhận bằng`
+      callNameStudentSound(text)
+      }
+    } else if (e.keyCode === 8) {
+      e.preventDefault()
+      if(currentStudent.value){
+          transferToOldPositionQueue(currentStudent.value.Row)
+      }
+    } else if (e.keyCode === 39) {
+      e.preventDefault()
+      if(currentStudent.value){
+          transferToLastQueue(currentStudent.value.Row)
+      }
+    } else if (e.shiftKey && e.keyCode === 46) {
+      e.preventDefault()
+      if(currentStudent.value){
+          removeFromQueue(currentStudent.value.Row)
+      }
     }
   }
-  const test = function(){
-    alert("test");
+  const callNameStudentSound = payload => {
+    // alert("test");
+    //  let text = ``
+      const utt = new SpeechSynthesisUtterance(payload);
+      // utt.lang='vi';
+      // utt.pitch = 0.7;  // a little lower
+      utt.pitch = 1.2;  // a little lower
+      // utt.rate = 1.4;   // a little faster
+      utt.rate = 0.5;   // a little faster
+      utt.volume = 0.8; // a little quieter
+      speechSynthesis.speak(utt);
+      // console.log(text);
   }
 
   onMounted(() => {
-    console.log("onMounted keyEnterHook")
-    if (!mainStore.isFieldFocusRegistered) {
+    if (!mainStore.isKeyEnterRegistered) {
+      console.log("onMounted keyEnterHook")
       window.addEventListener('keydown', keyEnterHook)
       mainStore.isKeyEnterRegistered = true
     } else {
@@ -305,31 +350,37 @@ const keyEnterHook = e => {
             </h5>
             <BaseButtons type="justify-center mb-5" no-wrap >
             <BaseButton
-              color="info"
-              :icon="mdiEye"
+              color="success"
+              :icon="mdiSpeakerPlay"
               small
-              data-tooltip-target="tooltip-default"
-              @keyup.enter="alert('test')"
-
+              @click="callNameStudentSound(`Mời bạn ${currentStudent.HoTen}, đến quầy số 1, để nhận bằng`)"
             />
 
             <BaseButton
-              color="info"
-              :icon="mdiEye"
+              color="warning"
+              :icon="mdiClockIn"
               small
-              @click="isModalActive = true"
+              v-if="currentStudent.TrangThai === 2"
+              @click="transferToOldPositionQueue(currentStudent.Row)"
+            />
+            <BaseButton
+              color="warning"
+              :icon="mdiClockIn"
+              small
+              disabled
+              v-if="currentStudent.TrangThai != 2"
             />
             <BaseButton
               color="info"
-              :icon="mdiEye"
+              :icon="mdiPriorityLow"
               small
-              @click="isModalActive = true"
+               @click="transferToLastQueue(currentStudent.Row)"
             />
             <BaseButton
               color="danger"
               :icon="mdiTrashCan"
               small
-              @click="isModalDangerActive = true"
+               @click="removeFromQueue(currentStudent.Row)"
             />
             </BaseButtons>
 
@@ -433,20 +484,20 @@ const keyEnterHook = e => {
               color="info"
               :icon="mdiPriorityLow"
               small
-              @click="isModalActive = true"
+              @click="transferToLastQueue(currentStudent.Row)"
             />
             <BaseButton
               color="danger"
               :icon="mdiTrashCan"
               small
-              @click="isModalDangerActive = true"
+              @click="removeFromQueue(student.Row)"
             />
             </span>
 
             <!-- <ButtonHandle v-if="student.TrangThai == 1" /> -->
 
             <ButtonPropressing v-else-if="student.TrangThai == 2" />
-            <ButtonFinish v-else-if="student.TrangThai == 3" />
+            <!-- <ButtonFinish v-else-if="student.TrangThai == 3" /> -->
             <span v-else>Khác</span>
             <!-- <ButtonTransferToWait v-else @click="transferToWait(student.STT)" /> -->
           </BaseButtons>
