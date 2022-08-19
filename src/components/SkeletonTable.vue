@@ -32,8 +32,8 @@
         <td data-label="Thiếu HS, HP"><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-24"></div></td>
         <td data-label="Khảo sát"><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></td>
         <td data-label="Lễ Phục"><div class="h-4 bg-gray-300 rounded-full dark:bg-gray-700 w-20"></div></td>
-        <td v-if="i == 1"><div class="h-8 lg:mx-auto bg-gray-300 rounded-lg dark:bg-gray-700 w-24"></div></td>
-        <td class="flex flex-row justify-end" v-else-if="buttonSkeleton == 'queue'">
+        <td v-if="i == 1 && buttonSkeleton == 'queue'"><div class="h-8 lg:mx-auto bg-gray-300 rounded-lg dark:bg-gray-700 w-24"></div></td>
+        <td class="flex flex-row justify-end" v-else-if="buttonSkeleton == 'queue' || buttonSkeleton == 'wait'">
         <!-- <div > -->
             <div class="h-8 w-8 m-1.5 bg-gray-300 rounded-md dark:bg-gray-700"></div>
             <div class="h-8 w-8 m-1.5 bg-gray-300 rounded-md dark:bg-gray-700"></div>

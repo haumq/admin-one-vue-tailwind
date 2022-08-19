@@ -12,8 +12,12 @@ import {
   mdiPalette,
   mdiHumanQueue,
   mdiSearchWeb,
-  mdiCertificate
+  mdiCertificate,
+  mdiFormatListBulletedSquare,
+  mdiFormatListNumbered
+
 } from '@mdi/js'
+
 
 export default [
   {
@@ -25,6 +29,11 @@ export default [
     to: '/search',
     label: 'Tra cứu',
     icon: mdiSearchWeb
+  },
+  {
+    to: '/wait',
+    label: 'Đợi phát bằng',
+    icon: mdiFormatListNumbered
   },
   {
     to: '/queue',
@@ -102,3 +111,5 @@ export default [
   //   target: '_blank'
   // }
 ]
+
+

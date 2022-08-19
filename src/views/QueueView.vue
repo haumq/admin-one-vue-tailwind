@@ -9,7 +9,7 @@ import {
 } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import NotificationBar from "@/components/NotificationBar.vue";
-import TableStudentWaitList from "@/components/TableStudentWaitList.vue";
+import TableStudentQueue from "@/components/TableStudentQueue.vue";
 import CardBox from "@/components/CardBox.vue";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
@@ -43,11 +43,11 @@ const modalOneActive = ref(false);
       </SectionTitleLineWithButton> -->
 
       <CardBox class="mb-6" has-table>
-        <TableStudentWaitList />
+        <TableStudentQueue />
       </CardBox>
     </SectionMain>
 
-    <CardBoxModal
+    <!-- <CardBoxModal
       v-model="modalOneActive"
       title="Please confirm action"
       button-label="Confirm"
@@ -68,6 +68,6 @@ const modalOneActive = ref(false);
           </span>
         </button>
       </div>
-    </SectionMain>
+    </SectionMain> -->
   </LayoutAuthenticated>
 </template>

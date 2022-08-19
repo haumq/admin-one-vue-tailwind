@@ -47,6 +47,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'Wait'
+    },
+    path: '/wait',
+    name: 'wait',
+    component: () => import('@/views/WaitView.vue')
+  },
+  {
+    meta: {
       title: 'Finish'
     },
     path: '/finish',

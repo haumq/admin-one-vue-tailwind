@@ -10,6 +10,7 @@ export const useMainStore = defineStore('main', {
     transferToWaitListRow: null,
     searchKey: '',
 
+
     urlApi: 'https://script.google.com/macros/s/AKfycbwR4DSX3Y3-1C7Xis1uzBYuvgo4jn1HZ_f7WwRnd9bBD1GskKaEkm7CiH9mGdzCN13P/exec',
     keyApi: '?key=AIzaSyAEzVpmZDCzC2e5Iz6gJaF-EGLoWc-xfXU',
     apiLoading: false,
@@ -19,7 +20,8 @@ export const useMainStore = defineStore('main', {
 
     /* Field focus with ctrl+k (to register only once) */
     isFieldFocusRegistered: false,
-    isKeyEnterRegistered: false,
+    isKeyQueueViewRegistered: false,
+    isKeyWaitViewRegistered: false,
 
     /* Sample data (commonly used) */
     clients: [],
@@ -39,7 +41,7 @@ export const useMainStore = defineStore('main', {
       }
     },
     setSearchKey(payload){
-      this.searchKey = payload
+      this.menu = payload
     },
     setSearchKeyEmpty(){
       this.searchKey = ''
@@ -88,6 +90,14 @@ export const useMainStore = defineStore('main', {
       this.students[payload - 2].TrangThai = '';
       this.students[payload - 2].NguoiXuLy = '';
     },
+    setTransfermultitofinish(payload, user){
+      for(let i = 0; payload.lenght; i++){
+        this.students[i - 2].TrangThai = 3;
+        this.students[i - 2].NguoiXuLy = user;
+        this.students[i - 2].ThoiGianNhanBang = new Date();
+      }
+    },
+
 
     fetch (sampleDataKey) {
       axios
@@ -261,6 +271,30 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setRemoveFromQueue(payload);
+            this.apiSuccessful = true;
+          }
+        })
+        .catch(error => {
+          this.apiFail = true;
+          console.log(error.message)
+        })
+    },
+    transferMultiToFinish(payload) {
+      let url = this.urlApi + this.keyApi + '&post=transfermultitofinish'
+      let data = {
+        rows: payload,
+        user: this.userEmail
+      }
+      axios
+      .post(url, data, {headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },})
+      .then(r => {
+          // console.log("finish")
+          // this.students[payload.row-2].TrangThai = 1;
+          if(r.data && r.data.data){
+            // console.log(r)
+            this.setTransfermultitofinish(payload, this.userEmail);
             this.apiSuccessful = true;
           }
         })

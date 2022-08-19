@@ -195,13 +195,13 @@ const checked = (isChecked, client) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="student in itemsPaginated" :key="student.Row"  >
+      <tr v-for="(student, index) in itemsPaginated" :key="student.Row"  >
         <TableCheckboxCell v-if="checkable" @checked="checked($event, student)" />
         <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td> -->
           <td data-label="STT">
-            {{ student.STT }}
+            {{ index + 1 + (currentPage - 1) * perPage }}
           </td>
         <td data-label="MSSV">
           {{ student.MSSV }}
@@ -246,12 +246,10 @@ const checked = (isChecked, client) => {
         </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <ButtonWait v-if="student.TrangThai == 1" />
-            <ButtonPropressing v-else-if="student.TrangThai == 2" />
-            <ButtonFinish v-else-if="student.TrangThai == 3"/>
-            <ButtonTransferToWait v-else @click="transferToWait(student.STT)" />
-
+            <ButtonFinish />
           </BaseButtons>
+           <small class="text-right">{{ new Date(student.ThoiGianNhanBang).toLocaleString() == 'Invalid Date' ? student.ThoiGianNhanBang : new Date(student.ThoiGianNhanBang).toLocaleString("vi") }}</small>
+           <br /><small class="text-right ">@{{ student.NguoiXuLy }}</small>
         </td>
       </tr>
     </tbody>

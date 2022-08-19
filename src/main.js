@@ -8,6 +8,7 @@ import { useMainStore } from '@/stores/main.js'
 import { useStyleStore } from '@/stores/style.js'
 import { useLayoutStore } from '@/stores/layout.js'
 import { darkModeKey, styleKey } from '@/config.js'
+import menu from '@/menu.js'
 
 import './css/main.css'
 
@@ -65,6 +66,10 @@ axios.interceptors.response.use(
             return Promise.reject(error);
         }
     );
+
+/* Set Menu*/
+const menuCustom = layoutStore.isBetaVersion ? menu : menu.filter(item => item.to != '/queue')
+layoutStore.setMenu(menuCustom)
 
 /* Fetch sample data */
 // mainStore.fetch('clients')
