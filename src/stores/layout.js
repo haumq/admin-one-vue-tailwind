@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 import menu from '@/menu.js'
+import router from '../router'
+import { useToastStore } from './toast'
+
 
 export const useLayoutStore = defineStore('layout', {
   state: () => ({
@@ -24,11 +27,16 @@ export const useLayoutStore = defineStore('layout', {
       // localStorage.isBetaVersion = this.isBetaVersion
       // console.log(window.localStorage.getItem("isBetaVersion"))
       this.isBetaVersion ? window.localStorage.setItem('isBetaVersion', true) : window.localStorage.removeItem('isBetaVersion')
-      const menuCustom = this.isBetaVersion ? menu : menu.filter(item => item.to != '/queue')
-      this.setMenu(menuCustom)
+      this.setMenu()
+      const toastStore = useToastStore()
+      toastStore.add({ title: 'title', body: `Đã chuyển sang phiên bản ${this.isBetaVersion ? 'Beta' : 'Alpha'}`, timeout: 4 });
+      this.isBetaVersion ? router.push({ name: 'queue' }) : router.push({ name: 'wait' })
     },
-    setMenu(payload){
-      this.menu = payload
+    setMenu(){
+      const menuCustom = this.isBetaVersion ? menu.filter(item => item.to != '/wait') : menu.filter(item => item.to != '/queue')
+      // this.setMenu(menuCustom)
+      this.menu = menuCustom
+      
     },
 
   }

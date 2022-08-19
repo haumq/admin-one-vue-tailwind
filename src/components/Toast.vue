@@ -1,7 +1,7 @@
 <template>
 
   <section
-    class="fixed bottom-1 z-40 w-max left-1/2 -translate-x-2/4 md:top-16 md:bottom-auto md:left-auto md:translate-x-0 md:right-10"
+    class="fixed bottom-1 z-50 w-max left-1/2 -translate-x-2/4 md:top-16 md:bottom-auto md:left-auto md:translate-x-0 md:right-10"
   >
       <!-- <div v-for="item in toastList">
       <div

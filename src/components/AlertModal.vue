@@ -248,7 +248,7 @@
     </div>
   </div>
 
-  <div class="alert-background" id="modal-error" onclick="hideAlertError()" style="display: none;">
+  <div class="alert-background" id="modal-error" onclick="hideAlertError()" style="display: block;">
     <!-- <div class="alert-background" id="modal-error"> -->
     <div class="alert-modal">
       <svg class="erorrmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
@@ -313,15 +313,15 @@
 
 </template>
 <script scoped>
-const props = defineProps({
-  label: {
-    type: [String, Number],
-    default: null
-  },
-  icon: {
-    type: String,
-    default: null
-  }
-}
+// const props = defineProps({
+//   label: {
+//     type: [String, Number],
+//     default: null
+//   },
+//   icon: {
+//     type: String,
+//     default: null
+//   }
+// })
 </script>
 

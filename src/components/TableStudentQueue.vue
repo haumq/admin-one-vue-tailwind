@@ -2,6 +2,7 @@
 import { computed, ref, onBeforeUnmount, onMounted } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useStyleStore } from "@/stores/style";
+import { useToastStore } from '@/stores/toast.js'
 import {
   mdiEye,
   mdiTrashCan,
@@ -33,8 +34,8 @@ defineProps({
 });
 
 const styleStore = useStyleStore();
-
 const mainStore = useMainStore();
+const toastStore = useToastStore()
 const userEmail = computed(() => mainStore.userEmail)
 
 const transferToWait = function (row) {
@@ -199,7 +200,7 @@ const keyEnterHook = e => {
         transferToProcess(currentStudent.value.Row)
         // alert("Enter");
       }
-    } else if (e.key === ' ' || e.key === 'Spacebar') {
+    } else if (e.key === ' ' || e.key === 'Spacebar' || (e.ctrlKey && e.key === "s")) {
       e.preventDefault()
       if(currentStudent.value.TrangThai === 2){
         transferToFisnish(currentStudent.value.Row)

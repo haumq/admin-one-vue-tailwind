@@ -7,7 +7,7 @@ import Toast from '@/components/Toast.vue'
 useMainStore().setUser({
   name: 'Hậu MQ',
   email: 'haumq@uef.edu.vn',
-  avatar: 'https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=91'
+  avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH_9NHFRLJL-KUm7oeoJqWis4tRLLu8dtuEQ&usqp=CAU'
 })
 </script>
 

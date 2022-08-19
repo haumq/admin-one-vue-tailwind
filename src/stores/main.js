@@ -46,6 +46,24 @@ export const useMainStore = defineStore('main', {
     setSearchKeyEmpty(){
       this.searchKey = ''
     },
+    setApiSuccessful(){
+      this.apiSuccessful = true;
+      setTimeout(() => {
+        this.apiSuccessful = false;
+      }, 2000);
+    },
+    setApiFail(){
+      this.apiFail = true;
+      setTimeout(() => {
+        this.apiFail = false;
+      }, 3000);
+    },
+    setApiSpinerShow(){
+      this.apiSpiner = true;
+    },
+    setApiSpinerHide(){
+      this.apiSpiner = false;
+    },
     callNameStudentSound (payload) {
       // alert("test");
       //  let text = ``
@@ -127,6 +145,7 @@ export const useMainStore = defineStore('main', {
         })
     },
     transferToWait(payload) {
+      this.setApiSpinerShow()
       let url = this.urlApi + this.keyApi + '&post=transfertowaitlist'
       // console.log(url)
       let data = {
@@ -151,7 +170,8 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(payload)
             this.setTransferToWaitList(payload);
-            this.apiSuccessful = true;
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
           }
 
         })
@@ -161,6 +181,7 @@ export const useMainStore = defineStore('main', {
         })
     },
     transferToProcess(payload) {
+      this.setApiSpinerShow()
       let url = this.urlApi + this.keyApi + '&post=transfertoprocessing'
       let data = {
         row: payload,
@@ -175,7 +196,8 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(payload)
             this.setTransferToProcessList(payload, this.userEmail);
-            this.apiSuccessful = true;
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
           }
         })
         .catch(error => {
@@ -184,6 +206,7 @@ export const useMainStore = defineStore('main', {
         })
     },
     transferToFisnish(payload) {
+      this.setApiSpinerShow()
       let url = this.urlApi + this.keyApi + '&post=transfertofinish'
       let data = {
         row: payload,
@@ -199,7 +222,8 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setTransferToFinishList(payload, this.userEmail);
-            this.apiSuccessful = true;
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
           }
         })
         .catch(error => {
@@ -208,6 +232,7 @@ export const useMainStore = defineStore('main', {
         })
     },
     transferToLastQueue(payload) {
+      this.setApiSpinerShow()
       let url = this.urlApi + this.keyApi + '&post=transfertoLastqueue'
       let data = {
         row: payload,
@@ -223,7 +248,8 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setTransferToLastQueue(payload, this.userEmail);
-            this.apiSuccessful = true;
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
           }
         })
         .catch(error => {
@@ -232,6 +258,7 @@ export const useMainStore = defineStore('main', {
         })
     },
     transferToOldPositionQueue(payload) {
+      this.setApiSpinerShow()
       let url = this.urlApi + this.keyApi + '&post=transfertooldpositionqueue'
       let data = {
         row: payload,
@@ -247,7 +274,8 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setTransferToOldPositionQueue(payload);
-            this.apiSuccessful = true;
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
           }
         })
         .catch(error => {
@@ -256,6 +284,7 @@ export const useMainStore = defineStore('main', {
         })
     },
     removeFromQueue(payload) {
+      this.setApiSpinerShow()
       let url = this.urlApi + this.keyApi + '&post=removefromqueue'
       let data = {
         row: payload,
@@ -271,7 +300,8 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setRemoveFromQueue(payload);
-            this.apiSuccessful = true;
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
           }
         })
         .catch(error => {
@@ -280,6 +310,7 @@ export const useMainStore = defineStore('main', {
         })
     },
     transferMultiToFinish(payload) {
+      this.setApiSpinerShow()
       let url = this.urlApi + this.keyApi + '&post=transfermultitofinish'
       let data = {
         rows: payload,
@@ -295,10 +326,12 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setTransfermultitofinish(payload, this.userEmail);
-            this.apiSuccessful = true;
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
           }
         })
         .catch(error => {
+          
           this.apiFail = true;
           console.log(error.message)
         })

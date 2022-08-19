@@ -1,5 +1,6 @@
 <script setup>
 import { useLayoutStore } from '@/stores/layout.js'
+import { useMainStore } from '@/stores/main.js'
 import { useStyleStore } from '@/stores/style.js'
 import { watchEffect, computed } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -9,8 +10,11 @@ import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import OverlayLayer from '@/components/OverlayLayer.vue'
 import Toast from '@/components/Toast.vue'
+import AlertSucessfulModal from '@/components/AlertSucessfulModal.vue'
+import AlertSpinerModal from '@/components/AlertSpinerModal.vue'
 
 const styleStore = useStyleStore()
+const mainStore = useMainStore()
 
 const layoutStore = useLayoutStore()
 
@@ -40,6 +44,8 @@ const overlayClick = () => {
         @overlay-click="overlayClick"
       />
       <Toast />
+      <AlertSucessfulModal v-if="mainStore.apiSuccessful" />
+      <AlertSpinerModal v-if="mainStore.apiSpiner" />
     </div>
   </div>
 </template>

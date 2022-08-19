@@ -38,6 +38,9 @@ onMounted(() => {
 const mainStore = useMainStore()
 
 const clientBarItems = computed(() => mainStore.clients.slice(0, 4))
+const totalStudent = computed(() => mainStore.students.length)
+const totalStudentWait = computed(() => mainStore.students.filter(item => item.TrangThai === 1).length)
+const totalStudentFinish = computed(() => mainStore.students.length)
 
 const transactionBarItems = computed(() => mainStore.history)
 </script>
@@ -48,7 +51,7 @@ const transactionBarItems = computed(() => mainStore.history)
 
       <SectionTitleLineWithButton
         :icon="mdiChartTimelineVariant"
-        title="Overview"
+        title="Thống kê"
         main
       >
         <!-- <BaseButton
@@ -62,6 +65,58 @@ const transactionBarItems = computed(() => mainStore.history)
         /> -->
       </SectionTitleLineWithButton>
 
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
+        <CardBoxWidget
+          trend="Overflow"
+          trend-type="up"
+          color="text-emerald-500"
+          :icon="mdiAccountMultiple"
+          :number="totalStudent"
+          label="Tổng sinh viên"
+        />
+        <CardBoxWidget
+          :trend="`${((totalStudentWait/totalStudent)*100).toFixed(2)}%`"
+          trend-type="up"
+          color="text-blue-500"
+          :icon="mdiCartOutline"
+          :number="totalStudentWait"
+          label="SV đang chờ"
+        />
+        <CardBoxWidget
+          trend="Overflow"
+          trend-type="alert"
+          color="text-red-500"
+          :icon="mdiChartTimelineVariant"
+          :number="((totalStudentWait/totalStudent)*100).toFixed(2)"
+          suffix="%"
+          label="Performance"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="flex flex-col justify-between">
+          <CardBoxTransaction
+            v-for="(transaction,index) in transactionBarItems"
+            :key="index"
+            :amount="transaction.amount"
+            :date="transaction.date"
+            :business="transaction.business"
+            :type="transaction.type"
+            :name="transaction.name"
+            :account="transaction.account"
+          />
+        </div>
+        <div class="flex flex-col justify-between">
+          <CardBoxClient
+            v-for="client in clientBarItems"
+            :key="client.id"
+            :name="client.name"
+            :login="client.login"
+            :date="client.created"
+            :progress="client.progress"
+          />
+        </div>
+      </div>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
         <CardBoxWidget
           trend="12%"
@@ -138,10 +193,10 @@ const transactionBarItems = computed(() => mainStore.history)
         </div>
       </CardBox> -->
 
-      <SectionTitleLineWithButton
+      <!-- <SectionTitleLineWithButton
         :icon="mdiAccountMultiple"
         title="Clients"
-      />
+      /> -->
 
       <!-- <NotificationBar
         color="info"
@@ -150,13 +205,13 @@ const transactionBarItems = computed(() => mainStore.history)
         <b>Responsive table.</b> Collapses on mobile
       </NotificationBar> -->
 
-      <CardBox
+      <!-- <CardBox
         :icon="mdiMonitorCellphone"
         title="Responsive table"
         has-table
       >
         <TableSampleClients />
-      </CardBox>
+      </CardBox> -->
     </SectionMain>
   </LayoutAuthenticated>
 </template>

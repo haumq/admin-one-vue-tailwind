@@ -36,9 +36,12 @@ onChildChanged(changeWaitList, (snapshot) => {
   // speechSynthesis.speak(utt);
   // console.log(text);
   // mainStore.fetchData();
-  mainStore.setTransferToWaitList(data);
     const currentStudent = mainStore.students.filter(item => (item.Row === data));
+    if(data && currentStudent.TrangThai != 1) {
+    mainStore.setTransferToWaitList(data);
+    // mainStore.setApiSuccessful()
     toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' được thêm vào hàng chờ!', timeout: 5 });
+    }
 });
 onChildChanged(changeProcessingList, (snapshot) => {
     let data;
@@ -46,10 +49,10 @@ onChildChanged(changeProcessingList, (snapshot) => {
       data = val.val();
     });
   mainStore.setTransferToProcessList(data.row, data.user);
-  if(data.user && data.user != mainStore.userEmail) {
+  // if(data.user && data.user != mainStore.userEmail) {
     const currentStudent = mainStore.students.filter(item => (item.Row === data.row));
     toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' đang được xử lý! @'+data.user, timeout: 5 });
-  }
+  // }
 });
 onChildChanged(changeFinishList, (snapshot) => {
     let data;
@@ -57,10 +60,10 @@ onChildChanged(changeFinishList, (snapshot) => {
       data = val.val();
     });
   mainStore.setTransferToFinishList(data.row, data.user);
-  if(data.user && data.user != mainStore.userEmail) {
+  // if(data.user && data.user != mainStore.userEmail) {
     const currentStudent = mainStore.students.filter(item => (item.Row === data.row));
     toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' hoàn tất nhận bằng! @'+data.user, timeout: 5 });
-  }
+  // }
 });
 onChildChanged(changeLastQueue, (snapshot) => {
   const data = snapshot.val();

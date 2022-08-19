@@ -68,8 +68,9 @@ axios.interceptors.response.use(
     );
 
 /* Set Menu*/
-const menuCustom = layoutStore.isBetaVersion ? menu : menu.filter(item => item.to != '/queue')
-layoutStore.setMenu(menuCustom)
+// const menuCustom = layoutStore.isBetaVersion ? menu.filter(item => item.to != '/wait') : menu.filter(item => item.to != '/queue')
+// layoutStore.setMenu(menuCustom)
+layoutStore.setMenu()
 
 /* Fetch sample data */
 // mainStore.fetch('clients')
