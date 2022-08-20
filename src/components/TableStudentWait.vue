@@ -40,6 +40,7 @@ const transferToLastQueue = (payload) => mainStore.transferToLastQueue(payload);
 const transferToOldPositionQueue = (payload) =>
   mainStore.transferToOldPositionQueue(payload);
 const removeFromQueue = (payload) => mainStore.removeFromQueue(payload);
+const transferToProcess = (payload) => mainStore.transferToProcess(payload);
 const transferToFisnish =  (payload) => mainStore.transferToFisnish(payload);
 const transferMultiToFinish = (payload) =>
   mainStore.transferMultiToFinish(payload);
@@ -559,7 +560,7 @@ onBeforeUnmount(() => {
             <div class="relative">
               <img
                 class="rounded-t-lg w-full"
-                src="public/image-2.jpg"
+                src="/public/image-2.jpg"
                 alt=""
               />
               <span
@@ -570,10 +571,10 @@ onBeforeUnmount(() => {
               </span>
             </div>
             <div class="p-5">
-              <BaseButtons type="justify-center lg:justify-around mb-5" no-wrap>               
-                <ButtonPropressing                 
+              <BaseButtons type="justify-center lg:justify-around mb-5" no-wrap>
+                <ButtonPropressing
                   @click="transferToFisnish(currentStudent.Row)"
-                />              
+                />
               </BaseButtons>
 
               <h5
@@ -592,6 +593,12 @@ onBeforeUnmount(() => {
                     )
                   "
                 />
+                <BaseButton
+                  color="warning"
+                  :icon="mdiPriorityLow"
+                  small
+                  @click="transferToProcess(currentStudent.Row)"
+                />
 
                 <BaseButton
                   color="warning"
@@ -600,12 +607,12 @@ onBeforeUnmount(() => {
                   v-if="currentStudent.TrangThai === 2"
                   @click="transferToOldPositionQueue(currentStudent.Row)"
                 />
-                <BaseButton
+                <!-- <BaseButton
                   color="warning"
                   :icon="mdiPriorityLow"
                   small
                   @click="transferToLastQueue(currentStudent.Row)"
-                />
+                /> -->
                 <BaseButton
                   color="danger"
                   :icon="mdiTrashCan"

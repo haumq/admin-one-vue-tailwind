@@ -16,7 +16,9 @@ export const useMainStore = defineStore('main', {
     apiLoading: false,
     apiSpiner: false,
     apiSuccessful: false,
+    messageSuccessful: '',
     apiFail: false,
+    messagefail: '',
 
     /* Field focus with ctrl+k (to register only once) */
     isFieldFocusRegistered: false,
@@ -52,11 +54,17 @@ export const useMainStore = defineStore('main', {
         this.apiSuccessful = false;
       }, 2000);
     },
+    setMessageSuccessful(payload){
+      this.messageSuccessful = payload;
+    },
     setApiFail(){
       this.apiFail = true;
       setTimeout(() => {
         this.apiFail = false;
       }, 3000);
+    },
+    setMessageFail(payload){
+      this.messageFail = payload;
     },
     setApiSpinerShow(){
       this.apiSpiner = true;
@@ -142,6 +150,7 @@ export const useMainStore = defineStore('main', {
         })
         .catch(error => {
           console.log(error.message)
+          this.setApiFail()
         })
     },
     transferToWait(payload) {
@@ -176,7 +185,8 @@ export const useMainStore = defineStore('main', {
 
         })
         .catch(error => {
-          this.apiFail = true;
+          this.setApiSpinerHide()
+          this.setApiFail()
           console.log(error.message)
         })
     },
@@ -201,7 +211,8 @@ export const useMainStore = defineStore('main', {
           }
         })
         .catch(error => {
-          this.apiFail = true;
+          this.setApiSpinerHide()
+          this.setApiFail()
           console.log(error.message)
         })
     },
@@ -227,7 +238,8 @@ export const useMainStore = defineStore('main', {
           }
         })
         .catch(error => {
-          this.apiFail = true;
+          this.setApiSpinerHide()
+          this.setApiFail()
           console.log(error.message)
         })
     },
@@ -253,7 +265,8 @@ export const useMainStore = defineStore('main', {
           }
         })
         .catch(error => {
-          this.apiFail = true;
+          this.setApiSpinerHide()
+          this.setApiFail()
           console.log(error.message)
         })
     },
@@ -279,7 +292,8 @@ export const useMainStore = defineStore('main', {
           }
         })
         .catch(error => {
-          this.apiFail = true;
+          this.setApiSpinerHide()
+          this.setApiFail()
           console.log(error.message)
         })
     },
@@ -305,7 +319,8 @@ export const useMainStore = defineStore('main', {
           }
         })
         .catch(error => {
-          this.apiFail = true;
+          this.setApiSpinerHide()
+          this.setApiFail()
           console.log(error.message)
         })
     },
@@ -331,8 +346,8 @@ export const useMainStore = defineStore('main', {
           }
         })
         .catch(error => {
-          
-          this.apiFail = true;
+          this.setApiSpinerHide()
+          this.setApiFail()
           console.log(error.message)
         })
     },

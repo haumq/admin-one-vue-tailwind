@@ -338,7 +338,7 @@ const keyEnterHook = e => {
 
       <div class="lg:w-1/3 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
         <div class="relative">
-          <img class="rounded-t-lg w-full" src="public/image-2.jpg"  alt="" />
+          <img class="rounded-t-lg w-full" src="/public/image-2.jpg"  alt="" />
           <span class="sticker absolute text-9xl text-white font-bold left-1/2 top-1/2 -translate-x-2/4 -translate-y-2/4 drop-shadow-lg">
             <!-- {{ currentStudent.STT }} -->
             {{ finish + 1 }}

@@ -12,6 +12,7 @@ import OverlayLayer from '@/components/OverlayLayer.vue'
 import Toast from '@/components/Toast.vue'
 import AlertSucessfulModal from '@/components/AlertSucessfulModal.vue'
 import AlertSpinerModal from '@/components/AlertSpinerModal.vue'
+import AlertFailModal from '@/components/AlertFailModal.vue'
 
 const styleStore = useStyleStore()
 const mainStore = useMainStore()
@@ -46,6 +47,7 @@ const overlayClick = () => {
       <Toast />
       <AlertSucessfulModal v-if="mainStore.apiSuccessful" />
       <AlertSpinerModal v-if="mainStore.apiSpiner" />
+      <AlertFailModal v-if="mainStore.apiFail" />
     </div>
   </div>
 </template>
