@@ -55,6 +55,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'Process'
+    },
+    path: '/process',
+    name: 'process',
+    component: () => import('@/views/ProcessView.vue')
+  },
+  {
+    meta: {
       title: 'Finish'
     },
     path: '/finish',

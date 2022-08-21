@@ -17,7 +17,9 @@ import {
   mdiEmail,
   mdiLogout,
   mdiGithub,
-  mdiThemeLightDark
+  mdiThemeLightDark,
+  mdiWhiteBalanceSunny,
+  mdiWeatherNight,
 } from '@mdi/js'
 import NavBarItem from '@/components/NavBarItem.vue'
 import NavBarItemLabel from '@/components/NavBarItemLabel.vue'
@@ -36,6 +38,7 @@ const styleStore = useStyleStore()
 const toggleLightDark = () => {
   styleStore.setDarkMode()
 }
+const isDarkMode = styleStore.darkMode
 
 const layoutStore = useLayoutStore()
 
@@ -166,7 +169,7 @@ const logout = () => {
             @click.prevent="toggleLightDark"
           >
             <NavBarItemLabel
-              :icon="mdiThemeLightDark"
+              :icon="styleStore.darkMode ? mdiWeatherNight : mdiWhiteBalanceSunny"
               label="Light/Dark"
               is-desktop-icon-only
             />

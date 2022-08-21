@@ -32,14 +32,14 @@ export const useMainStore = defineStore('main', {
   }),
   actions: {
     setUser (payload) {
-      if (payload.name) {
-        this.userName = payload.name
+      if (payload.displayName) {
+        this.userName = payload.displayName
       }
       if (payload.email) {
         this.userEmail = payload.email
       }
-      if (payload.avatar) {
-        this.userAvatar = payload.avatar
+      if (payload.photoURL) {
+        this.userAvatar = payload.photoURL
       }
     },
     setSearchKey(payload){
@@ -89,16 +89,15 @@ export const useMainStore = defineStore('main', {
       // this.transferToWaitListRow = payload;
       this.students[payload - 2].TrangThai = 1;
     },
-    setTransferToProcessList(payload, user){
+    setTransferToProcessList(payload){
       // this.transferToWaitListRow = payload;
       this.students[payload - 2].TrangThai = 2;
-      this.students[payload - 2].NguoiXuLy = user;
-    },
-    setTransferToFinishList(payload, user){
-      // this.transferToWaitListRow = payload;
-      this.students[payload - 2].TrangThai = 3;
-      this.students[payload - 2].NguoiXuLy = user;
+      this.students[payload - 2].NguoiXuLy = this.userEmail;
       this.students[payload - 2].ThoiGianNhanBang = new Date();
+    },
+    setTransferToFinishList(payload){
+      // this.transferToWaitListRow = payload;
+      this.students[payload - 2].TrangThai = 3;      
     },
     setTransferToLastQueue(payload){
       // this.transferToWaitListRow = payload;
@@ -116,11 +115,16 @@ export const useMainStore = defineStore('main', {
       this.students[payload - 2].TrangThai = '';
       this.students[payload - 2].NguoiXuLy = '';
     },
-    setTransfermultitofinish(payload, user){
+    setTransfermultitoprocess(payload){
+      for(let i = 0; payload.lenght; i++){
+        this.students[i - 2].TrangThai = 2;
+        this.students[i - 2].NguoiXuLy = this.userEmail;
+        this.students[i - 2].ThoiGianNhanBang = new Date();
+      }
+    },
+    setTransfermultitofinish(payload){
       for(let i = 0; payload.lenght; i++){
         this.students[i - 2].TrangThai = 3;
-        this.students[i - 2].NguoiXuLy = user;
-        this.students[i - 2].ThoiGianNhanBang = new Date();
       }
     },
 
@@ -205,7 +209,7 @@ export const useMainStore = defineStore('main', {
           // this.students[payload.row-2].TrangThai = 1;
           if(r.data && r.data.data){
             // console.log(payload)
-            this.setTransferToProcessList(payload, this.userEmail);
+            this.setTransferToProcessList(payload);
             this.setApiSpinerHide()
             this.setApiSuccessful()
           }
@@ -232,7 +236,7 @@ export const useMainStore = defineStore('main', {
           // this.students[payload.row-2].TrangThai = 1;
           if(r.data && r.data.data){
             // console.log(r)
-            this.setTransferToFinishList(payload, this.userEmail);
+            this.setTransferToFinishList(payload);
             this.setApiSpinerHide()
             this.setApiSuccessful()
           }
@@ -324,9 +328,9 @@ export const useMainStore = defineStore('main', {
           console.log(error.message)
         })
     },
-    transferMultiToFinish(payload) {
+    transferMultiToProcess(payload) {
       this.setApiSpinerShow()
-      let url = this.urlApi + this.keyApi + '&post=transfermultitofinish'
+      let url = this.urlApi + this.keyApi + '&post=transfermultitoprocess'
       let data = {
         rows: payload,
         user: this.userEmail
@@ -340,7 +344,33 @@ export const useMainStore = defineStore('main', {
           // this.students[payload.row-2].TrangThai = 1;
           if(r.data && r.data.data){
             // console.log(r)
-            this.setTransfermultitofinish(payload, this.userEmail);
+            this.setTransfermultitofinish(payload);
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
+          }
+        })
+        .catch(error => {
+          this.setApiSpinerHide()
+          this.setApiFail()
+          console.log(error.message)
+        })
+    },
+    transferMultiToFinish(payload) {
+      this.setApiSpinerShow()
+      let url = this.urlApi + this.keyApi + '&post=transfermultitofinish'
+      let data = {
+        rows: payload,
+      }
+      axios
+      .post(url, data, {headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },})
+      .then(r => {
+          // console.log("finish")
+          // this.students[payload.row-2].TrangThai = 1;
+          if(r.data && r.data.data){
+            // console.log(r)
+            this.setTransfermultitofinish(payload);
             this.setApiSpinerHide()
             this.setApiSuccessful()
           }

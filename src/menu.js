@@ -14,7 +14,8 @@ import {
   mdiSearchWeb,
   mdiCertificate,
   mdiFormatListBulletedSquare,
-  mdiFormatListNumbered
+  mdiFormatListNumbered,
+  mdiPlaylistCheck
 
 } from '@mdi/js'
 
@@ -39,6 +40,11 @@ export default [
     to: '/queue',
     label: 'Phát bằng',
     icon: mdiHumanQueue
+  },
+  {
+    to: '/process',
+    label: 'Xác nhận',
+    icon: mdiPlaylistCheck
   },
   {
     to: '/finish',

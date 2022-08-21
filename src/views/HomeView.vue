@@ -10,7 +10,11 @@ import {
   mdiReload,
   mdiGithub,
   mdiChartPie,
-  mdiCertificate
+  mdiCertificate,
+  mdiAccountDetails,
+  mdiAccountCheck,
+  mdiClipboardText,
+  mdiMedal,
 } from '@mdi/js'
 import * as chartConfig from '@/components/Charts/chart.config.js'
 import LineChart from '@/components/Charts/LineChart.vue'
@@ -44,8 +48,11 @@ const totalStudent = computed(() => mainStore.students.length)
 const totalStudentWait = computed(() => mainStore.students.filter(item => item.TrangThai === 1).length)
 const totalStudentProcessing = computed(() => mainStore.students.filter(item => item.TrangThai === 2).length)
 const totalStudentFinish = computed(() => mainStore.students.filter(item => item.TrangThai === 3).length)
-const notEnoughList = computed(() => mainStore.students.filter(item => item.GDQP != '' || item.ThieuHSHP !='' || item.ThieuHSHP != 0).length)
-const percentageFinish = computed(() => numeral(100*(totalStudentFinish.value/totalStudent.value)).format('0.00') )
+const notEnoughList = computed(() => mainStore.students.filter(item => item.ThieuHSHP != '' || item.ThieuHSHP != 0).length)
+const notArmyList = computed(() => mainStore.students.filter(item => item.GDQP != '').length)
+const percentageFinish = computed(() => numeral((totalStudentFinish.value/totalStudent.value)).format('0.00%') )
+const percentageWait = computed(() => numeral((totalStudentWait.value/totalStudent.value)).format('0.00%') )
+const percentageProcess = computed(() => numeral((totalStudentProcessing.value/totalStudent.value)).format('0.00%') )
 
 const transactionBarItems = computed(() => mainStore.history)
 </script>
@@ -82,7 +89,7 @@ const transactionBarItems = computed(() => mainStore.history)
         <CardBoxWidget
           :trend="percentageFinish"
           trend-type="up"
-          color="text-blue-500"
+          color="text-emerald-500"
           :icon="mdiCertificate"
           :number="totalStudentFinish"
           label="Đã nhận bằng"
@@ -91,10 +98,9 @@ const transactionBarItems = computed(() => mainStore.history)
           trend="Overflow"
           trend-type="alert"
           color="text-red-500"
-          :icon="mdiChartTimelineVariant"
-          :number="percentageFinish"
-          suffix="%"
-          label="Tỉ lệ hoàn thành"
+          :icon="mdiMedal"
+          :number="notArmyList"
+          label="Chứng chỉ GDQP"
         />
       </div>
 
@@ -124,18 +130,18 @@ const transactionBarItems = computed(() => mainStore.history)
       </div>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6" v-if="totalStudent">
         <CardBoxWidget
-          trend="0%"
+          :trend="percentageWait"
           trend-type="up"
           color="text-emerald-500"
-          :icon="mdiAccountMultiple"
+          :icon="mdiAccountDetails"
           :number="totalStudentWait"
           label="Hàng đợi"
         />
         <CardBoxWidget
-          trend="0%"
-          trend-type="down"
-          color="text-blue-500"
-          :icon="mdiCartOutline"
+          :trend="percentageProcess"
+          trend-type="up"
+          color="text-emerald-500"
+          :icon="mdiAccountCheck"
           :number="totalStudentProcessing"
           label="Đang xử lý"
         />
@@ -143,7 +149,7 @@ const transactionBarItems = computed(() => mainStore.history)
           trend="Overflow"
           trend-type="alert"
           color="text-red-500"
-          :icon="mdiChartTimelineVariant"
+          :icon="mdiClipboardText"
           :number="notEnoughList"
           label="Thiếu HS, HP/GDQP"
         />

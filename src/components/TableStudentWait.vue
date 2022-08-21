@@ -13,6 +13,7 @@ import {
   mdiPriorityHigh,
   mdiSpeakerPlay,
   mdiClockIn,
+  mdiCheckboxMarkedOutline
 } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
@@ -42,13 +43,13 @@ const transferToOldPositionQueue = (payload) =>
 const removeFromQueue = (payload) => mainStore.removeFromQueue(payload);
 const transferToProcess = (payload) => mainStore.transferToProcess(payload);
 const transferToFisnish =  (payload) => mainStore.transferToFisnish(payload);
-const transferMultiToFinish = (payload) =>
-  mainStore.transferMultiToFinish(payload);
+const transferMultiToProcess = (payload) => mainStore.transferMultiToProcess(payload);
+const transferMultiToFinish = (payload) => mainStore.transferMultiToFinish(payload);
 
 const items = computed(() => {
   let students = mainStore.students;
   students = students.filter(
-    (item) => item.TrangThai == 1 || item.TrangThai == 2
+    (item) => item.TrangThai == 1
   );
   return students.sort((a, b) => {
     return new Date(a.NgayTao) - new Date(b.NgayTao);
@@ -57,7 +58,7 @@ const items = computed(() => {
 });
 const finish = computed(() => {
   let students = mainStore.students;
-  return students.filter((item) => item.TrangThai == 3).length;
+  return students.filter((item) => item.TrangThai == 3  || item.TrangThai == 2).length;
 });
 const currentStudent = ref({})
 const currentStudentIndex = ref(0)
@@ -189,7 +190,7 @@ const keyHandleWaitViewHook = (e) => {
   if (e.ctrlKey && e.key === "s") {
     e.preventDefault();
     if (rowsList.value && rowsList.value.length > 0) {
-      transferMultiToFinish(rowsList.value);
+      transferMultiToProcess(rowsList.value);
     }
   }
 };
@@ -326,17 +327,17 @@ onBeforeUnmount(() => {
                 @click="setCurrentStudent(student, index)"
               />
               <BaseButton
-                color="warning"
-                :icon="mdiPriorityLow"
+                color="danger"
+                :icon="mdiCheckboxMarkedOutline"
                 small
-                @click="transferToLastQueue(student.Row)"
+                @click="transferToProcess(student.Row)"
               />
-              <BaseButton
+              <!-- <BaseButton
                 color="danger"
                 :icon="mdiTrashCan"
                 small
                 @click="removeFromQueue(student.Row)"
-              />
+              /> -->
             </span>
             <!-- <ButtonPropressing v-else-if="student.TrangThai == 2" />
             <span v-else>Khác</span> -->
@@ -424,7 +425,7 @@ onBeforeUnmount(() => {
     </small>
     <button
       @dblclick="isModalDangerActive = !isModalDangerActive"
-      @click.ctrl="transferMultiToFinish(rowsList)"
+      @click.ctrl="transferMultiToProcess(rowsList)"
       class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
     >
       <span
@@ -572,9 +573,15 @@ onBeforeUnmount(() => {
             </div>
             <div class="p-5">
               <BaseButtons type="justify-center lg:justify-around mb-5" no-wrap>
-                <ButtonPropressing
+                <!-- <ButtonPropressing
                   @click="transferToFisnish(currentStudent.Row)"
-                />
+                /> -->
+                  <BaseButton
+                color="success"
+                :icon="mdiCheckboxMarkedOutline"
+                @click="transferToProcess(student.Row)"
+                label="Lấy bằng"
+              />
               </BaseButtons>
 
               <h5
