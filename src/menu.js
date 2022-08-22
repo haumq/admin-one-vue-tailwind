@@ -15,7 +15,11 @@ import {
   mdiCertificate,
   mdiFormatListBulletedSquare,
   mdiFormatListNumbered,
-  mdiPlaylistCheck
+  mdiPlaylistCheck,
+  mdiMedal,
+  mdiAccountSearch,
+  mdiClipboardText,
+  mdiClipboardCheck
 
 } from '@mdi/js'
 
@@ -29,7 +33,7 @@ export default [
   {
     to: '/search',
     label: 'Tra cứu',
-    icon: mdiSearchWeb
+    icon: mdiAccountSearch
   },
   {
     to: '/wait',
@@ -52,9 +56,19 @@ export default [
     icon: mdiCertificate
   },
   {
-    to: '/army',
-    label: 'CC GDQP',
-    icon: mdiCertificate
+      label: 'GDQP',
+      icon: mdiMedal,
+      menu: [
+        {
+          to: '/army',
+          label: 'CC GDQP',
+          icon: mdiClipboardText
+        },
+        {
+          label: 'Nhận CC',
+          icon: mdiClipboardCheck
+        }
+      ]
   }
   // ,
   // {

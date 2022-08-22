@@ -47,7 +47,13 @@ const transferMultiToFinish = (payload) =>
   mainStore.transferMultiToFinish(payload);
 
 const items = computed(() => {
-  let students = mainStore.students;
+  // let students = mainStore.students;
+   let students
+  if( mainStore.dataTo > 0 && mainStore.dataFrom > 0){
+    students = mainStore.students.filter((item) => item.Row <= mainStore.dataTo && item.Row >= mainStore.dataFrom)
+  }else{
+    students = mainStore.students
+  }
   students = students.filter(
     (item) => item.TrangThai == 2
   );
@@ -58,7 +64,10 @@ const items = computed(() => {
 });
 const finish = computed(() => {
   let students = mainStore.students;
-  return students.filter((item) => item.TrangThai == 3).length;
+   if( mainStore.dataTo > 0 && mainStore.dataFrom > 0){
+     return students.filter((item) => item.Row <= mainStore.dataTo && item.Row >= mainStore.dataFrom && item.TrangThai == 3).length;
+   }
+    return students.filter((item) => item.TrangThai == 3).length;
 });
 const currentStudent = ref({})
 const currentStudentIndex = ref(0)
@@ -597,7 +606,7 @@ onBeforeUnmount(() => {
               <h5
                 class="mb-5 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
               >
-                Noteworthy technology
+                Xác nhận đã nhận bằng
               </h5>
               <BaseButtons type="justify-center mb-5" no-wrap>
                 <BaseButton

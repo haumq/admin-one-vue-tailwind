@@ -46,9 +46,14 @@ const transferToFisnish =  (payload) => mainStore.transferToFisnish(payload);
 const transferMultiToProcess = (payload) => mainStore.transferMultiToProcess(payload);
 const transferMultiToFinish = (payload) => mainStore.transferMultiToFinish(payload);
 
-// const lenghtData =
 const items = computed(() => {
-  let students = mainStore.students;
+  let students
+  if( mainStore.dataTo > 0 && mainStore.dataFrom > 0){
+    students = mainStore.students.filter((item) => item.Row <= mainStore.dataTo && item.Row >= mainStore.dataFrom)
+  }else{
+    students = mainStore.students
+  }
+  // students=students.splice(0, lenghtData);
   students = students.filter(
     (item) => item.TrangThai == 1
   );
@@ -59,7 +64,11 @@ const items = computed(() => {
 });
 const finish = computed(() => {
   let students = mainStore.students;
-  return students.filter((item) => item.TrangThai == 3  || item.TrangThai == 2).length;
+  if( mainStore.dataTo > 0 && mainStore.dataFrom > 0){
+    return students.filter((item, index) => item.Row <= mainStore.dataTo && item.Row >= mainStore.dataFrom && (item.TrangThai == 3  || item.TrangThai == 2)).length;
+  }
+    return students.filter((item, index) => (item.TrangThai == 3  || item.TrangThai == 2)).length;
+
 });
 const currentStudent = ref({})
 const currentStudentIndex = ref(0)
@@ -72,6 +81,7 @@ const setCurrentStudent = (payload, index) => {
   currentStudentIndex.value = index
   isModalActive.value = !isModalActive.value
 }
+const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${mainStore.Area}, để nhận bằng`: 'đến quầy hồ sơ!' );
 
 const isModalActive = ref(false);
 
@@ -306,18 +316,6 @@ onBeforeUnmount(() => {
         <td data-label="Lễ Phục">
           {{ student.LePhuc }}
         </td>
-        <!-- <td data-label="Progress" class="lg:w-32">
-          <progress
-            class="flex w-2/5 self-center lg:w-full"
-            max="100"
-            :value="student.progress"
-          >
-            {{ student.progress }}
-          </progress>
-        </td> -->
-        <!-- <td data-label="NgayTao" class="lg:w-1 whitespace-nowrap">
-          <small class="text-gray-500 dark:text-slate-400" :title="student.NgayTao">{{ student.NgayTao }}</small>
-        </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-end" no-wrap>
             <span v-if="student.TrangThai == 1">
@@ -333,22 +331,15 @@ onBeforeUnmount(() => {
                 small
                 @click="transferToProcess(student.Row)"
               />
-              <!-- <BaseButton
-                color="danger"
-                :icon="mdiTrashCan"
-                small
-                @click="removeFromQueue(student.Row)"
-              /> -->
+
             </span>
-            <!-- <ButtonPropressing v-else-if="student.TrangThai == 2" />
-            <span v-else>Khác</span> -->
           </BaseButtons>
         </td>
       </tr>
     </tbody>
     <SkeletonTable :buttonSkeleton="'wait'" v-if="isloading && numPages <= 0" />
   </table>
-  <CardBox empty v-if="!isloading && numPages <= 0" />
+  <CardBox empty v-if="!isloading && numPages <= 0 && items" />
   <div
     class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800 select-none"
   >
@@ -433,7 +424,7 @@ onBeforeUnmount(() => {
         class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
       >
         {{
-          `Xác nhận ${rowsList.length} SV trong trang 1 ở DS trên đã nhận bằng`
+          `Đã tìm xong bằng của ${rowsList.length} SV ở trang 1`
         }}
       </span>
     </button>
@@ -580,7 +571,7 @@ onBeforeUnmount(() => {
                   <BaseButton
                 color="success"
                 :icon="mdiCheckboxMarkedOutline"
-                @click="transferToProcess(student.Row)"
+                @click="transferToProcess(currentStudent.Row)"
                 label="Lấy bằng"
               />
               </BaseButtons>
@@ -588,7 +579,7 @@ onBeforeUnmount(() => {
               <h5
                 class="mb-5 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
               >
-                Noteworthy technology
+                Tìm và phát bằng
               </h5>
               <BaseButtons type="justify-center mb-5" no-wrap>
                 <BaseButton
@@ -597,7 +588,7 @@ onBeforeUnmount(() => {
                   small
                   @click.stop="
                     callNameStudentSound(
-                      `Xin mời bạn:  ${currentStudent.HoTen}, đến quầy hồ sơ!`
+                      `Xin mời bạn:  ${currentStudent.HoTen}, ${textSound}`
                     )
                   "
                 />

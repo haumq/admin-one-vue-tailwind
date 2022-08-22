@@ -151,7 +151,7 @@ const transactionBarItems = computed(() => mainStore.history)
           color="text-red-500"
           :icon="mdiClipboardText"
           :number="notEnoughList"
-          label="Thiếu HS, HP/GDQP"
+          label="Thiếu HS, HP"
         />
       </div>
 

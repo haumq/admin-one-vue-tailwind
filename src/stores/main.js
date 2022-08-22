@@ -163,10 +163,10 @@ export const useMainStore = defineStore('main', {
       axios
         .get(this.urlApi + this.keyApi)
         .then(r => {
-          this.apiLoading = true
+          // this.apiLoading = true
           if (r.data && r.data.data) {
             this.students = r.data.data
-            this.apiLoading = false
+            // this.apiLoading = false
           }
           // console.log(r.data)
         })

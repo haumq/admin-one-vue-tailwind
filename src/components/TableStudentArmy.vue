@@ -52,13 +52,13 @@ const removeFromQueue =  (payload) => mainStore.removeFromQueue(payload);
 // const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const finish = computed(() => {
   let students = mainStore.students
-  return students.filter(item => item.NhanGDQP).length;
+  return students.filter(item => item.ThoiGianNhanGDQP).length;
 }
 );
 const waitList = computed(() => {
   let students = mainStore.students;
   students = students.filter(
-    (item) => (item.TrangThai == 1 || item.TrangThai == 2 ) && item.GDQP.trim() != '' && !item.NhanGDQP
+    (item) => (item.ThoiGianNhanBang) && item.GDQP.trim() != '' && !item.ThoiGianNhanGDQP
   );
   return students.sort((a, b) => {
     return new Date(a.NgayTao) - new Date(b.NgayTao);
@@ -186,6 +186,7 @@ const checked = (isChecked, client) => {
     );
   }
 };
+const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${mainStore.Area}, để nhận chứng chỉ Giáo dục Quốc Phòng`: 'đến quầy hồ sơ!' );
 
 const keyEnterHook = e => {
     if (e.key === 'Enter') {
@@ -206,25 +207,26 @@ const keyEnterHook = e => {
     } else if (e.keyCode === 120) {
       e.preventDefault()
       if(currentStudent.value){
-      const text = `Mời bạn ${currentStudent.value.HoTen}, đến quầy số 1, để nhận bằng`
+      const text = `Mời bạn ${currentStudent.value.HoTen}, ${textSound.value}`
       callNameStudentSound(text)
       }
-    } else if (e.keyCode === 8) {
-      e.preventDefault()
-      if(currentStudent.value){
-          transferToOldPositionQueue(currentStudent.value.Row)
-      }
-    } else if (e.keyCode === 39) {
-      e.preventDefault()
-      if(currentStudent.value){
-          transferToLastQueue(currentStudent.value.Row)
-      }
-    } else if (e.shiftKey && e.keyCode === 46) {
-      e.preventDefault()
-      if(currentStudent.value){
-          removeFromQueue(currentStudent.value.Row)
-      }
-    }
+    } 
+    // else if (e.keyCode === 8) {
+    //   e.preventDefault()
+    //   if(currentStudent.value){
+    //       transferToOldPositionQueue(currentStudent.value.Row)
+    //   }
+    // } else if (e.keyCode === 39) {
+    //   e.preventDefault()
+    //   if(currentStudent.value){
+    //       transferToLastQueue(currentStudent.value.Row)
+    //   }
+    // } else if (e.shiftKey && e.keyCode === 46) {
+    //   e.preventDefault()
+    //   if(currentStudent.value){
+    //       removeFromQueue(currentStudent.value.Row)
+    //   }
+    // }
   }
   const callNameStudentSound = payload => {
     // alert("test");
@@ -366,7 +368,7 @@ const keyEnterHook = e => {
               color="success"
               :icon="mdiSpeakerPlay"
               small
-              @click="callNameStudentSound(`Mời bạn ${currentStudent.HoTen}, đến quầy số 1, để nhận chứng chỉ GDQP`)"
+              @click="callNameStudentSound(`Mời bạn ${currentStudent.HoTen}, ${textSound}`)"
             />
 
 
@@ -473,28 +475,13 @@ const keyEnterHook = e => {
         </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-end" no-wrap>
-            <span v-if="student.TrangThai == 1">
-
             <BaseButton
-              color="info"
-              :icon="mdiPriorityLow"
-              small
-              @click="transferToLastQueue(currentStudent.Row)"
-            />
-            <BaseButton
-              color="danger"
-              :icon="mdiTrashCan"
-              small
-              @click="removeFromQueue(student.Row)"
-            />
-            </span>
+              color="success"
+              :icon="mdiSeal"
+              label="Nhận CC"
 
-            <!-- <ButtonHandle v-if="student.TrangThai == 1" /> -->
 
-            <ButtonPropressing v-else-if="student.TrangThai == 2" />
-            <!-- <ButtonFinish v-else-if="student.TrangThai == 3" /> -->
-            <span v-else>Khác</span>
-            <!-- <ButtonTransferToWait v-else @click="transferToWait(student.STT)" /> -->
+            />
           </BaseButtons>
         </td>
       </tr>

@@ -34,10 +34,14 @@ const transferToWait =  function(row){
 
 const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const items = computed(() => {
-  let students = mainStore.students
-  if(transferToWaitListRow.value) {
-   students[transferToWaitListRow.value -2].TrangThai = 1;
+  // let students = mainStore.students
+   let students
+  if( mainStore.dataTo > 0 && mainStore.dataFrom > 0){
+    students = mainStore.students.filter((item) => item.Row <= mainStore.dataTo && item.Row >= mainStore.dataFrom)
+  }else{
+    students = mainStore.students
   }
+ 
   students = students.filter(item => item.TrangThai == 3);
   return students.sort((a, b) => {
     return new Date(a.ThoiGianNhanBang) - new Date(b.ThoiGianNhanBang);

@@ -2,7 +2,18 @@
 import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useStyleStore } from "@/stores/style";
-import { mdiEye, mdiTrashCan, mdiArrowRight, mdiChevronRight, mdiChevronLeft} from "@mdi/js";
+import {
+  mdiEye,
+  mdiTrashCan,
+  mdiArrowRight,
+  mdiChevronRight,
+  mdiChevronLeft,
+  mdiPriorityLow,
+  mdiPriorityHigh,
+  mdiSpeakerPlay,
+  mdiClockIn,
+  mdiCheckboxMarkedOutline
+} from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
@@ -15,6 +26,7 @@ import ButtonTransferToWait from "./ButtonTransferToWait.vue";
 import ButtonPropressing from "./ButtonPropressing.vue";
 import CardBox from "@/components/CardBox.vue";
 import SkeletonTable from "@/components/SkeletonTable.vue";
+import OverlayLayer from "@/components/OverlayLayer.vue";
 
 
 defineProps({
@@ -42,6 +54,15 @@ const items = computed(() => {
   return students;
 }
 );
+const currentStudent = ref({})
+const currentStudentIndex = ref(0)
+
+const setCurrentStudent = (payload, index) => {
+  currentStudent.value =  payload
+  currentStudentIndex.value = index
+  isModalActive.value = !isModalActive.value
+}
+const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${mainStore.Area}`: 'đến quầy hồ sơ!' );
 
 
 
@@ -152,10 +173,27 @@ const checked = (isChecked, client) => {
     );
   }
 };
+
+
+const callNameStudentSound = payload => {
+    // alert("test");
+    //  let text = ``
+      const utt = new SpeechSynthesisUtterance(payload);
+      // utt.lang='vi';
+      // utt.pitch = 0.7;  // a little lower
+      utt.pitch = 1.4;  // a little lower
+      // utt.rate = 1.4;   // a little faster
+      utt.rate = 0.5;   // a little faster
+      utt.volume = 1; // a little quieter
+      speechSynthesis.speak(utt);
+      // console.log(text);
+}
+
+
 </script>
 
 <template>
-  <CardBoxModal v-model="isModalActive" title="Sample modal">
+  <!-- <CardBoxModal v-model="isModalActive" title="Sample modal">
     <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
     <p>This is sample modal</p>
   </CardBoxModal>
@@ -163,7 +201,7 @@ const checked = (isChecked, client) => {
   <CardBoxModal v-model="isModalDangerActive" large-title="Please confirm" button="danger" has-cancel>
     <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
     <p>This is sample modal</p>
-  </CardBoxModal>
+  </CardBoxModal> -->
 
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
     <span v-for="checkedRow in checkedRows" :key="checkedRow.id"
@@ -192,7 +230,7 @@ const checked = (isChecked, client) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="student in itemsPaginated" :key="student.Row"  >
+      <tr v-for="student in itemsPaginated" :key="student.Row" @dblclick="setCurrentStudent(student, index)" >
         <TableCheckboxCell v-if="checkable" @checked="checked($event, student)" />
         <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
@@ -308,4 +346,203 @@ const checked = (isChecked, client) => {
     </BaseLevel>
     <!-- <Pagination /> -->
   </div>
+
+  <section>
+    <!-- <button @click="isModalActive = !isModalActive">Test Button</button> -->
+    <OverlayLayer v-if="isModalActive" @click.stop="isModalActive = !isModalActive">
+      <!-- <div
+        class="w-full max-w-5xl z-10 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+      > -->
+        <section
+          class="flex flex-col lg:flex-row p-2 mb-4 w-full max-w-5xl z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          v-if="currentStudent"
+          @click="isModalActive = true"
+        >
+          <div class="px-2 lg:w-2/3">
+            <h4
+              class="mb-5 text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center drop-shadow-lg"
+            >
+              {{ currentStudent.HoTen }}
+            </h4>
+            <h5
+              class="mb-5 text-xl md:text-3xl lg:text-5xl font-bold text-gray-700 dark:text-gray-200 text-center drop-shadow-lg"
+            >
+              {{ currentStudent.SoVaoSo }}
+            </h5>
+
+            <div class="flex flex-col md:flex-row mt-5 mb-5">
+              <div class="md:w-1/2">
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  MSSV: {{ currentStudent.MSSV }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Ngày sinh:
+                  {{
+                    new Date(currentStudent.NgaySinh).toLocaleDateString() ==
+                    "Invalid Date"
+                      ? currentStudent.NgaySinh
+                      : new Date(currentStudent.NgaySinh).toLocaleDateString(
+                          "vi",
+                          { dateStyle: "short" }
+                        )
+                  }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Ngành: {{ currentStudent.Nganh }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Xếp Loại: {{ currentStudent.XepLoai }}
+                </p>
+
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Điện thoại:
+                  {{
+                    currentStudent.DienThoai.toLocaleString("vi", {
+                      minimumIntegerDigits: 10,
+                      useGrouping: false,
+                    })
+                  }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Email: {{ currentStudent.Email }}
+                </p>
+              </div>
+              <div>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Số hiệu bằng: {{ currentStudent.SoHieuBang }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  GDQP: {{ currentStudent.GDQP }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Thiếu HS, HP: {{ currentStudent.ThieuHSHP }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Khảo sát: {{ currentStudent.KhaoSat }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Lễ phục: {{ currentStudent.LePhuc }}
+                </p>
+                <p
+                  class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400"
+                >
+                  Thời gian:
+                  {{
+                    new Date(currentStudent.NgayTao).toLocaleString() ==
+                    "Invalid Date"
+                      ? currentStudent.NgayTao
+                      : new Date(currentStudent.NgayTao).toLocaleString("vi")
+                  }}
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="justify-center items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4"
+            ></div>
+          </div>
+
+          <div
+            class="lg:w-1/3 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+          >
+            <div class="relative">
+              <img
+                class="rounded-t-lg w-full"
+                src="/public/image-2.jpg"
+                alt=""
+              />
+              <span
+                class="sticker absolute text-9xl text-white font-bold left-1/2 top-1/2 -translate-x-2/4 -translate-y-2/4 drop-shadow-lg"
+              >
+                <!-- {{ currentStudent.STT }} -->
+                {{ currentStudent.STT }}
+              </span>
+            </div>
+            <div class="p-5">
+              <BaseButtons type="justify-center lg:justify-around mb-5" no-wrap>
+                <!-- <ButtonPropressing
+                  @click="transferToFisnish(currentStudent.Row)"
+                /> -->
+                  <!-- <BaseButton
+                color="success"
+                :icon="mdiCheckboxMarkedOutline"
+                @click="transferToWait(student.Row)"
+                label="Lấy bằng"
+              /> -->
+               <ButtonTransferToWait  v-if="!currentStudent.TrangThai" @click="transferToWait(currentStudent.Row)" />
+              </BaseButtons>
+
+              <h5
+                class="mb-5 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+              >
+                Tra thông tin sinh viên
+              </h5>
+              <BaseButtons type="justify-center mb-5" no-wrap>
+                <BaseButton
+                  color="success"
+                  :icon="mdiSpeakerPlay"
+                  small
+                  @click.stop="
+                    callNameStudentSound(
+                      `Xin mời bạn:  ${currentStudent.HoTen}, ${textSound}`
+                    )
+                  "
+                />
+                <!-- <BaseButton
+                  color="warning"
+                  :icon="mdiPriorityLow"
+                  small
+                  @click="transferToProcess(currentStudent.Row)"
+                /> -->
+
+                <BaseButton
+                  color="warning"
+                  :icon="mdiClockIn"
+                  small
+                  v-if="currentStudent.TrangThai === 2"
+                  @click="transferToOldPositionQueue(currentStudent.Row)"
+                />
+                <BaseButton
+                  color="warning"
+                  :icon="mdiPriorityLow"
+                  small
+                   v-if="currentStudent.TrangThai == 1 || currentStudent.TrangThai == 2"
+                  @click="transferToLastQueue(currentStudent.Row)"
+                />
+                <BaseButton
+                  color="danger"
+                  :icon="mdiTrashCan"
+                  small
+                  v-if="currentStudent.TrangThai == 1 || currentStudent.TrangThai == 2"
+                  @click="removeFromQueue(currentStudent.Row)"
+                />
+              </BaseButtons>
+            </div>
+          </div>
+        </section>
+      <!-- </div> -->
+    </OverlayLayer>
+  </section>
 </template>

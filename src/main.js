@@ -56,20 +56,20 @@ const layoutStore = useLayoutStore(pinia)
 /* Axios */
 import axios from 'axios'
 
-// axios.interceptors.request.use(config => {
-//     mainStore.apiLoading = true;
-//     return config;
-// });
-// axios.interceptors.response.use(
-//         response => {
-//             mainStore.apiLoading = false;
-//             return Promise.resolve(response);
-//         },
-//         error => {
-//             mainStore.apiLoading = false;
-//             return Promise.reject(error);
-//         }
-//     );
+axios.interceptors.request.use(config => {
+    mainStore.apiLoading = true;
+    return config;
+});
+axios.interceptors.response.use(
+        response => {
+            mainStore.apiLoading = false;
+            return Promise.resolve(response);
+        },
+        error => {
+            mainStore.apiLoading = false;
+            return Promise.reject(error);
+        }
+    );
 
 /* Set Login */
 // router.beforeEach(async (to, from, next) => {
@@ -123,7 +123,7 @@ if ((!localStorage[darkModeKey] && window.matchMedia('(prefers-color-scheme: dar
 const defaultDocumentTitle = 'Phát bằng - Vue 3 Tailwind'
 
 router.beforeEach(async (to, from, next) => {
-  if (to.name !== 'login' && !window.localStorage.getItem('isAuthenticated')) next({ name: 'login' })
+  if (to.name !== 'login' && !window.localStorage.getItem('isAuthenticated') &&  mainStore.isAuthenticated) next({ name: 'login' })
   else next()
 })
 
