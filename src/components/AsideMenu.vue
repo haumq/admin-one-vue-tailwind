@@ -3,6 +3,7 @@ import { mdiLogout, mdiClose, mdiBeta, mdiAlpha } from '@mdi/js'
 import { computed, ref } from 'vue'
 import { useLayoutStore } from '@/stores/layout.js'
 import { useStyleStore } from '@/stores/style.js'
+import { useMainStore } from '@/stores/main.js'
 import AsideMenuList from '@/components/AsideMenuList.vue'
 import AsideMenuItem from '@/components/AsideMenuItem.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
@@ -22,7 +23,7 @@ defineProps({
 const emit = defineEmits(['menu-click'])
 
 const layoutStore = useLayoutStore()
-
+const mainStore = useMainStore()
 const styleStore = useStyleStore()
 
 const betaVersionTogggle = () => layoutStore.betaVersionTogggle()
@@ -56,7 +57,7 @@ const menuClick = (event, item) => {
       <div :class="styleStore.asideBrandStyle"
         class="flex flex-row h-14 items-center justify-between dark:bg-slate-900">
         <div class="text-center flex-1 lg:text-left lg:pl-6 xl:text-center xl:pl-0">
-          <b class="font-black">One</b>
+          <b class="font-black text-center"> Quầy số {{ mainStore.Area }}</b>
         </div>
         <button class="hidden lg:inline-block xl:hidden p-3" @click.prevent="layoutStore.isAsideLgActive = false">
           <BaseIcon :path="mdiClose" />

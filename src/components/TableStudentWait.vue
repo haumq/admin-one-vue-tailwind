@@ -46,6 +46,7 @@ const transferToFisnish =  (payload) => mainStore.transferToFisnish(payload);
 const transferMultiToProcess = (payload) => mainStore.transferMultiToProcess(payload);
 const transferMultiToFinish = (payload) => mainStore.transferMultiToFinish(payload);
 
+// const lenghtData =
 const items = computed(() => {
   let students = mainStore.students;
   students = students.filter(
@@ -260,7 +261,7 @@ onBeforeUnmount(() => {
       <tr v-for="(student, index) in itemsPaginated" :key="student.Row" @dblclick="setCurrentStudent(student, index)">
         <TableCheckboxCell
           v-if="checkable"
-          @checked="checked($event, student)"
+          @="checked($event, student)"
         />
         <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />

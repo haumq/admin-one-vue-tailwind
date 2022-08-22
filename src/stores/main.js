@@ -4,9 +4,13 @@ import axios from 'axios'
 export const useMainStore = defineStore('main', {
   state: () => ({
     /* User */
-    userName: null,
-    userEmail: null,
-    userAvatar: null,
+    userName: 'User Name',
+    userEmail: 'user@uef.edu.vn',
+    userAvatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH_9NHFRLJL-KUm7oeoJqWis4tRLLu8dtuEQ&usqp=CAU',
+    isAuthenticated: false,
+    Area: 0,
+    dataFrom: 0,
+    dataTo: 0,
     transferToWaitListRow: null,
     searchKey: '',
 
@@ -28,9 +32,21 @@ export const useMainStore = defineStore('main', {
     /* Sample data (commonly used) */
     clients: [],
     history: [],
-    students: []
+    students: [],
+
   }),
   actions: {
+    setDataWithUser (payload) {
+      if (payload.SoQuay) {
+        this.Area = payload.SoQuay
+      }
+      if (payload.Tu) {
+        this.dataFrom = payload.Tu
+      }
+      if (payload.Den) {
+        this.dataTo = payload.Den
+      }
+    },
     setUser (payload) {
       if (payload.displayName) {
         this.userName = payload.displayName
@@ -97,7 +113,7 @@ export const useMainStore = defineStore('main', {
     },
     setTransferToFinishList(payload){
       // this.transferToWaitListRow = payload;
-      this.students[payload - 2].TrangThai = 3;      
+      this.students[payload - 2].TrangThai = 3;
     },
     setTransferToLastQueue(payload){
       // this.transferToWaitListRow = payload;
@@ -147,10 +163,29 @@ export const useMainStore = defineStore('main', {
       axios
         .get(this.urlApi + this.keyApi)
         .then(r => {
+          this.apiLoading = true
           if (r.data && r.data.data) {
             this.students = r.data.data
+            this.apiLoading = false
           }
-          console.log(r.data)
+          // console.log(r.data)
+        })
+        .catch(error => {
+          console.log(error.message)
+          this.setApiFail()
+        })
+    },
+    getDataWithUser () {
+      axios
+        .get(this.urlApi + this.keyApi + `&getdatawithuser=${this.userEmail}`)
+        .then(r => {
+
+          if (r.data && r.data.data) {
+            // this.students = r.data.data
+            this.setDataWithUser(r.data.data[0])
+            // console.log(r.data.data[0])
+          }
+          // console.log(r.data)
         })
         .catch(error => {
           console.log(error.message)

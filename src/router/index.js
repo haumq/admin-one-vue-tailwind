@@ -71,6 +71,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'Army'
+    },
+    path: '/army',
+    name: 'army',
+    component: () => import('@/views/ArmyView.vue')
+  },
+  {
+    meta: {
       title: 'Student'
     },
     path: '/student',

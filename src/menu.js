@@ -50,6 +50,11 @@ export default [
     to: '/finish',
     label: 'Đã nhận bằng',
     icon: mdiCertificate
+  },
+  {
+    to: '/army',
+    label: 'CC GDQP',
+    icon: mdiCertificate
   }
   // ,
   // {

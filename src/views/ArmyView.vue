@@ -5,27 +5,29 @@ import {
   mdiTableBorder,
   mdiTableOff,
   mdiGithub,
+  mdiClose,
 } from "@mdi/js";
 import SectionMain from "@/components/SectionMain.vue";
 import NotificationBar from "@/components/NotificationBar.vue";
-import TableStudentWait from "@/components/TableStudentWait.vue";
+import TableStudentArmy from "@/components/TableStudentArmy.vue";
 import CardBox from "@/components/CardBox.vue";
+import CardBoxModal from "@/components/CardBoxModal.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { useMainStore } from '@/stores/main.js'
-const mainStore = useMainStore()
+import { useMainStore } from "@/stores/main.js";
+import { onBeforeMount, ref } from "vue";
+const mainStore = useMainStore();
+
+const modalOneActive = ref(false);
 
 </script>
 
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <!-- <SectionTitleLineWithButton :icon="mdiTableBorder" title="Tables" main>
-      </SectionTitleLineWithButton> -->
-
-      <CardBox class="mb-6" has-table >
-        <TableStudentWait />
+      <CardBox class="mb-6" has-table>
+        <TableStudentArmy />
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>

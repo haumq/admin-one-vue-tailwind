@@ -28,6 +28,7 @@ const username = computed(() => props.username)
     <img
       :src="avatar"
       :alt="username"
+      onerror="this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH_9NHFRLJL-KUm7oeoJqWis4tRLLu8dtuEQ&usqp=CAU'"
       class="rounded-full block h-auto w-full max-w-full bg-gray-100 dark:bg-slate-800"
     >
   </div>

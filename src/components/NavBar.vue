@@ -28,6 +28,11 @@ import BaseDivider from '@/components/BaseDivider.vue'
 import UserAvatarCurrentUser from '@/components/UserAvatarCurrentUser.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
 import NavBarSearch from '@/components/NavBarSearch.vue'
+import { getAuth, getRedirectResult, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut } from "firebase/auth";
+
+
+const provider = new GoogleAuthProvider();
+const auth = getAuth();
 
 const mainStore = useMainStore()
 
@@ -54,6 +59,7 @@ const menuOpenLg = () => {
 
 const logout = () => {
   //
+  auth.signOut()
 }
 </script>
 
