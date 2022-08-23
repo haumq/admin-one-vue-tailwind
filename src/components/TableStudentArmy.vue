@@ -43,11 +43,9 @@ const transferToWait = function (row) {
   let payload = { row: row };
   mainStore.transferToWait(payload);
 };
-const transferToProcess =  (payload) => mainStore.transferToProcess(payload);
-const transferToFisnish =  (payload) => mainStore.transferToFisnish(payload);
-const transferToLastQueue =  (payload) => mainStore.transferToLastQueue(payload);
-const transferToOldPositionQueue =  (payload) => mainStore.transferToOldPositionQueue(payload);
-const removeFromQueue =  (payload) => mainStore.removeFromQueue(payload);
+
+const transferToArmyFinish =  (payload) => mainStore.transferToArmyFinish(payload);
+const transferToArmyNotReceived =  (payload) => mainStore.transferToArmyNotReceived(payload);
 
 // const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const finish = computed(() => {
@@ -188,46 +186,6 @@ const checked = (isChecked, client) => {
 };
 const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${mainStore.Area}, để nhận chứng chỉ Giáo dục Quốc Phòng`: 'đến quầy hồ sơ!' );
 
-const keyEnterHook = e => {
-    if (e.key === 'Enter') {
-      // e.preventDefault()
-        // console.log(currentStudent.value.TrangThai)
-      if(currentStudent.value.TrangThai === 1){
-        transferToProcess(currentStudent.value.Row)
-        // alert("Enter");
-      }
-    } else if (e.key === ' ' || e.key === 'Spacebar' || (e.ctrlKey && e.key === "s")) {
-      e.preventDefault()
-      if(currentStudent.value.TrangThai === 2){
-        transferToFisnish(currentStudent.value.Row)
-        // console.log("Enter")
-        // alert("Enter");
-      }
-      // console.log("Escape")
-    } else if (e.keyCode === 120) {
-      e.preventDefault()
-      if(currentStudent.value){
-      const text = `Mời bạn ${currentStudent.value.HoTen}, ${textSound.value}`
-      callNameStudentSound(text)
-      }
-    } 
-    // else if (e.keyCode === 8) {
-    //   e.preventDefault()
-    //   if(currentStudent.value){
-    //       transferToOldPositionQueue(currentStudent.value.Row)
-    //   }
-    // } else if (e.keyCode === 39) {
-    //   e.preventDefault()
-    //   if(currentStudent.value){
-    //       transferToLastQueue(currentStudent.value.Row)
-    //   }
-    // } else if (e.shiftKey && e.keyCode === 46) {
-    //   e.preventDefault()
-    //   if(currentStudent.value){
-    //       removeFromQueue(currentStudent.value.Row)
-    //   }
-    // }
-  }
   const callNameStudentSound = payload => {
     // alert("test");
     //  let text = ``
@@ -242,6 +200,26 @@ const keyEnterHook = e => {
       // console.log(text);
   }
 
+    const keyEnterHook = e => {
+
+        if (e.keyCode === 120) {
+          e.preventDefault()
+          if(currentStudent.value){
+          const text = `Mời bạn ${currentStudent.value.HoTen}, ${textSound.value}`
+          callNameStudentSound(text)
+          }
+      } else if (e.ctrlKey && e.key === 'Enter') {
+      e.preventDefault()
+      if(currentStudent.value){
+          transferToArmyFinish(currentStudent.value.Row)
+      }
+    } else if (e.shiftKey && e.keyCode === 46) {
+      e.preventDefault()
+      if(currentStudent.value){
+          transferToArmyNotReceived(currentStudent.value.Row)
+      }
+    }
+    }
   onMounted(() => {
     if (!mainStore.isKeyQueueViewRegistered) {
       // console.log("onMounted keyEnterHook")
@@ -355,7 +333,7 @@ const keyEnterHook = e => {
               color="success"
               :icon="mdiSeal"
               label="Nhận CC GDQP"
-
+              @click="transferToArmyFinish(currentStudent.Row)"
 
             />
          </BaseButtons>
@@ -376,7 +354,7 @@ const keyEnterHook = e => {
               color="danger"
               :icon="mdiTrashCan"
               small
-
+              @click="transferToArmyNotReceived(currentStudent.Row)"
             />
             </BaseButtons>
 
@@ -479,8 +457,13 @@ const keyEnterHook = e => {
               color="success"
               :icon="mdiSeal"
               label="Nhận CC"
-
-
+              @click="transferToArmyFinish(student.Row)"
+            />
+             <BaseButton
+              color="danger"
+              :icon="mdiTrashCan"
+              small
+              @click="transferToArmyNotReceived(student.Row)"
             />
           </BaseButtons>
         </td>

@@ -143,6 +143,16 @@ export const useMainStore = defineStore('main', {
         this.students[i - 2].TrangThai = 3;
       }
     },
+    setTransferToArmyFinish(payload){
+      // this.transferToWaitListRow = payload;
+      this.students[payload - 2].NhanGDQP = 1;
+      this.students[payload - 2].ThoiGianNhanGDQP = new Date();
+    },
+    setTransferToArmyNotReceived(payload){
+      // this.transferToWaitListRow = payload;
+      this.students[payload - 2].NhanGDQP = 0;
+      this.students[payload - 2].ThoiGianNhanGDQP = new Date();
+    },
 
 
     fetch (sampleDataKey) {
@@ -406,6 +416,54 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setTransfermultitofinish(payload);
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
+          }
+        })
+        .catch(error => {
+          this.setApiSpinerHide()
+          this.setApiFail()
+          console.log(error.message)
+        })
+    },
+    transferToArmyNotReceived(payload) {
+      this.setApiSpinerShow()
+      let url = this.urlApi + this.keyApi + '&post=transfertoarmynotreceived'
+      let data = {
+        row: payload,
+      }
+      axios
+      .post(url, data, {headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },})
+      .then(r => {
+          if(r.data && r.data.data){
+            // console.log(r)
+            this.setTransferToArmyNotReceived(payload);
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
+          }
+        })
+        .catch(error => {
+          this.setApiSpinerHide()
+          this.setApiFail()
+          console.log(error.message)
+        })
+    },
+    transferToArmyFinish(payload) {
+      this.setApiSpinerShow()
+      let url = this.urlApi + this.keyApi + '&post=transfertoarmyfinish'
+      let data = {
+        row: payload,
+      }
+      axios
+      .post(url, data, {headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },})
+      .then(r => {
+          if(r.data && r.data.data){
+            // console.log(r)
+            this.setTransferToArmyFinish(payload);
             this.setApiSpinerHide()
             this.setApiSuccessful()
           }

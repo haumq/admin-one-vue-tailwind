@@ -18,6 +18,9 @@ const changeFinishList = ref(db, 'changeFinishList');
 const changeLastQueue = ref(db, 'changeLastQueue');
 const changeOldPositionQueue = ref(db, 'changeOldPositionQueue');
 const changeRemoveFromQueue = ref(db, 'changeRemoveFromQueue');
+const changeArmyFinish = ref(db, 'changeArmyFinish');
+const changeArmyNotReceived = ref(db, 'changeArmyNotReceived');
+
 // const a = ref('changed')
 // onValue(starCountRef, (snapshot) => {
 //   const data = snapshot.val();
@@ -82,6 +85,18 @@ onChildChanged(changeRemoveFromQueue, (snapshot) => {
   mainStore.setRemoveFromQueue(data);
     const currentStudent = mainStore.students.filter(item => (item.Row === data));
     toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' bị rút khỏi danh sách chờ!', timeout: 5 });
+});
+onChildChanged(changeArmyFinish, (snapshot) => {
+  const data = snapshot.val();
+  mainStore.setTransferToArmyFinish(data);
+    const currentStudent = mainStore.students.filter(item => (item.Row === data));
+    toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' đã nhận chứng chỉ GDQP!', timeout: 5 });
+});
+onChildChanged(changeArmyNotReceived, (snapshot) => {
+  const data = snapshot.val();
+  mainStore.setTransferToArmyNotReceived(data);
+    const currentStudent = mainStore.students.filter(item => (item.Row === data));
+    toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' KHÔNG nhận chứng chỉ GDQP!', timeout: 5 });
 });
 </script>
 

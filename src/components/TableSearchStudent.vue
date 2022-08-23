@@ -45,7 +45,7 @@ const transferToWait = (payload) => mainStore.transferToWait(payload);
 
 // const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const items = computed(() => {
-  let students = mainStore.students.filter(item => item.HoTen.toString().toLocaleLowerCase().includes(searchKey.value.toString().toLocaleLowerCase()) || 
+  let students = mainStore.students.filter(item => item.HoTen.toString().toLocaleLowerCase().includes(searchKey.value.toString().toLocaleLowerCase()) ||
   item.MSSV.toString().toLocaleLowerCase().includes(searchKey.value.toString().toLocaleLowerCase())
   )
   // if(transferToWaitListRow.value) {
@@ -283,8 +283,12 @@ const callNameStudentSound = payload => {
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <ButtonWait v-if="student.TrangThai == 1" />
-            <ButtonPropressing v-else-if="student.TrangThai == 2" />
+            <!-- <ButtonPropressing v-else-if="student.TrangThai == 2" /> -->
             <ButtonFinish v-else-if="student.TrangThai == 3"/>
+            <p v-else-if="student.TrangThai == 2" >
+              Đã xuất bằng,<br />
+              chờ xác nhận
+            </p>
             <ButtonTransferToWait v-else @click="transferToWait(student.Row)" />
           </BaseButtons>
         </td>
@@ -354,7 +358,7 @@ const callNameStudentSound = payload => {
         class="w-full max-w-5xl z-10 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
       > -->
         <section
-          class="flex flex-col lg:flex-row p-2 mb-4 w-full max-w-5xl z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          class="flex flex-col lg:flex-row p-2 mb-4 w-full max-w-5xl  z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
           v-if="currentStudent"
           @click="isModalActive = true"
         >

@@ -51,11 +51,20 @@ const removeFromQueue =  (payload) => mainStore.removeFromQueue(payload);
 // const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const finish = computed(() => {
   let students = mainStore.students
+  if( mainStore.dataTo > 0 && mainStore.dataFrom > 0){
+    return students.filter((item, index) => item.Row <= mainStore.dataTo && item.Row >= mainStore.dataFrom && item.TrangThai == 3).length;
+  }
   return students.filter(item => item.TrangThai == 3).length;
 }
 );
 const waitList = computed(() => {
-  let students = mainStore.students;
+  // let students = mainStore.students;
+   let students
+  if( mainStore.dataTo > 0 && mainStore.dataFrom > 0){
+    students = mainStore.students.filter((item) => item.Row <= mainStore.dataTo && item.Row >= mainStore.dataFrom)
+  }else{
+    students = mainStore.students
+  }
   students = students.filter(
     (item) => item.TrangThai == 1 || item.TrangThai == 2
   );
