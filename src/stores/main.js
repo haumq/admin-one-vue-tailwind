@@ -144,14 +144,15 @@ export const useMainStore = defineStore('main', {
       }
     },
     setTransferToArmyFinish(payload){
-      // this.transferToWaitListRow = payload;
       this.students[payload - 2].NhanGDQP = 1;
       this.students[payload - 2].ThoiGianNhanGDQP = new Date();
     },
     setTransferToArmyNotReceived(payload){
-      // this.transferToWaitListRow = payload;
       this.students[payload - 2].NhanGDQP = 0;
       this.students[payload - 2].ThoiGianNhanGDQP = new Date();
+    },
+    setEditColumnNotEnough(row, value){
+      this.students[row - 2].ThieuHSHP = value;
     },
 
 
@@ -464,6 +465,31 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setTransferToArmyFinish(payload);
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
+          }
+        })
+        .catch(error => {
+          this.setApiSpinerHide()
+          this.setApiFail()
+          console.log(error.message)
+        })
+    },
+    editColumnNotEnough(row, value) {
+      this.setApiSpinerShow()
+      let url = this.urlApi + this.keyApi + '&post=editcolumnnotenough'
+      let data = {
+        row: row,
+        data: value
+      }
+      axios
+      .post(url, data, {headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },})
+      .then(r => {
+          if(r.data && r.data.data){
+            // console.log(r)
+            this.setEditColumnNotEnough(row, value);
             this.setApiSpinerHide()
             this.setApiSuccessful()
           }

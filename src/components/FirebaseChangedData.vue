@@ -20,6 +20,7 @@ const changeOldPositionQueue = ref(db, 'changeOldPositionQueue');
 const changeRemoveFromQueue = ref(db, 'changeRemoveFromQueue');
 const changeArmyFinish = ref(db, 'changeArmyFinish');
 const changeArmyNotReceived = ref(db, 'changeArmyNotReceived');
+const changeEditColumnNotEnough = ref(db, 'changeEditColumnNotEnough');
 
 // const a = ref('changed')
 // onValue(starCountRef, (snapshot) => {
@@ -97,6 +98,21 @@ onChildChanged(changeArmyNotReceived, (snapshot) => {
   mainStore.setTransferToArmyNotReceived(data);
     const currentStudent = mainStore.students.filter(item => (item.Row === data));
     toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' KHÔNG nhận chứng chỉ GDQP!', timeout: 5 });
+});
+onChildChanged(changeEditColumnNotEnough, (snapshot) => {
+    let data;
+    onValue(changeEditColumnNotEnough, (val) => {
+      data = val.val();
+    });
+  mainStore.setEditColumnNotEnough(data.row, data.data);
+  // if(data.user && data.user != mainStore.userEmail) {
+    const currentStudent = mainStore.students.filter(item => (item.Row === data.row));
+    if(data.data == ''){
+      toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' đã bổ sung đủ hồ sơ, học phí!', timeout: 5 });
+    }else{
+      toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' đã được cập nhật!', timeout: 5 });
+    }
+  // }
 });
 </script>
 
