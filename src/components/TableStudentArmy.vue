@@ -385,9 +385,10 @@ const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${main
         <th class="lg:hidden">NGÀNH</th>
         <th class="whitespace-nowrap">SỐ VÀO SỔ</th>
         <th>GDQP</th>
-        <th class="whitespace-nowrap">THIẾU HS, HP</th>
-        <th>KHẢO SÁT</th>
-        <th>LỄ PHỤC</th>
+        <th>Thời gian nhận CC GDQP</th>
+        <!-- <th class="whitespace-nowrap">THIẾU HS, HP</th> -->
+        <!-- <th>KHẢO SÁT</th> -->
+        <!-- <th>LỄ PHỤC</th> -->
         <th>TRẠNG THÁI</th>
         <!-- <th /> -->
       </tr>
@@ -430,27 +431,21 @@ const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${main
         <td data-label="GDQP">
           {{ student.GDQP }}
         </td>
-        <td data-label="Thiếu HS, HP">
+        <td data-label="Thời gian nhận">
+            {{ new Date(student.ThoiGianNhanGDQP).toLocaleString("vi") == 'Invalid Date' ? student.ThoiGianNhanGDQP : new
+          Date(student.ThoiGianNhanGDQP).toLocaleString("vi")
+          }}
+        </td>
+
+        <td data-label="Thiếu HS, HP" class="lg:hidden">
           {{ student.ThieuHSHP }}
         </td>
-        <td data-label="Khảo sát">
+        <td data-label="Khảo sát" class="lg:hidden">
           {{ student.KhaoSat }}
         </td>
-        <td data-label="Lễ Phục">
+        <td data-label="Lễ Phục" class="lg:hidden">
           {{ student.LePhuc }}
         </td>
-        <!-- <td data-label="Progress" class="lg:w-32">
-          <progress
-            class="flex w-2/5 self-center lg:w-full"
-            max="100"
-            :value="student.progress"
-          >
-            {{ student.progress }}
-          </progress>
-        </td> -->
-        <!-- <td data-label="NgayTao" class="lg:w-1 whitespace-nowrap">
-          <small class="text-gray-500 dark:text-slate-400" :title="student.NgayTao">{{ student.NgayTao }}</small>
-        </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-end" no-wrap>
             <BaseButton

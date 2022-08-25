@@ -65,6 +65,7 @@ export default [
           icon: mdiClipboardText
         },
         {
+          to: '/certificate',
           label: 'Nhận CC',
           icon: mdiClipboardCheck
         }

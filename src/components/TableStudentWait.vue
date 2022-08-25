@@ -303,6 +303,7 @@ onBeforeUnmount(() => {
         </td>
         <td data-label="Số Vào Sổ">
           {{ student.SoVaoSo }}
+          <p v-if="student.SongBangSongNganh"> <small>Song bằng/ song ngành: </small><br/>{{ student.SongBangSongNganh }}</p>
         </td>
         <td data-label="GDQP">
           {{ student.GDQP }}

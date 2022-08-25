@@ -104,6 +104,7 @@ export const useMainStore = defineStore('main', {
     setTransferToWaitList(payload){
       // this.transferToWaitListRow = payload;
       this.students[payload - 2].TrangThai = 1;
+      this.students[payload - 2].NgayTao = new Date();
     },
     setTransferToProcessList(payload){
       // this.transferToWaitListRow = payload;
@@ -153,6 +154,9 @@ export const useMainStore = defineStore('main', {
     },
     setEditColumnNotEnough(row, value){
       this.students[row - 2].ThieuHSHP = value;
+    },
+    setEditColumnVestments(row, value){
+      this.students[row - 2].LePhuc = value;
     },
 
 
@@ -490,6 +494,32 @@ export const useMainStore = defineStore('main', {
           if(r.data && r.data.data){
             // console.log(r)
             this.setEditColumnNotEnough(row, value);
+            this.setApiSpinerHide()
+            this.setApiSuccessful()
+          }
+        })
+        .catch(error => {
+          this.setApiSpinerHide()
+          this.setApiFail()
+          console.log(error.message)
+        })
+    },
+    editColumnVestments(row, value) {
+      this.setApiSpinerShow()
+      let url = this.urlApi + this.keyApi + '&post=editcolumnvestments'
+      let data = {
+        row: row,
+        data: value
+      }
+      axios
+      .post(url, data, {headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },})
+      .then(r => {
+          if(r.data && r.data.data){
+            // console.log(r)
+
+            this.setEditColumnVestments(row, value == 1 ? 'Đã trả' : 'Có mượn');
             this.setApiSpinerHide()
             this.setApiSuccessful()
           }

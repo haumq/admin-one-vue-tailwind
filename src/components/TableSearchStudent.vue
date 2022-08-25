@@ -45,10 +45,11 @@ const searchKey = computed(() => mainStore.searchKey)
 console.log(searchKey.value)
 
 const transferToWait = (payload) => mainStore.transferToWait(payload);
+const editColumnVestments = (row, value) => mainStore.editColumnVestments(row, value);
 const editColumnNotEnough = (row, value) => {
   mainStore.editColumnNotEnough(row, value);
   isEditModalActive.value = !isEditModalActive.value;
-  console.log(isEditModalActive.value)
+  // console.log(isEditModalActive.value)
 }
 
 // const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
@@ -272,18 +273,24 @@ const callNameStudentSound = payload => {
         </td>
         <td data-label="Số Vào Sổ">
           {{ student.SoVaoSo }}
+           <p v-if="student.SongBangSongNganh"> <small>Song bằng/ song ngành: </small><br/>{{ student.SongBangSongNganh }}</p>
         </td>
         <td data-label="GDQP">
           {{ student.GDQP }}
         </td>
         <td data-label="Thiếu HS, HP">
           {{ student.ThieuHSHP }}
+          <BaseButton class="hidden lg:inline-block" color="warning" :icon="mdiLeadPencil" small v-if="student.ThieuHSHP != ''"
+              @click="setCurrentStudentEdit(student, index)" />
         </td>
         <td data-label="Khảo sát">
           {{ student.KhaoSat }}
         </td>
         <td data-label="Lễ Phục">
-          {{ student.LePhuc }}
+            <button v-if="student.LePhuc == 'Có mượn'" @click="editColumnVestments(student.Row, 1)" type="button" class="focus:outline-none text-white bg-yellow-600 dark:bg-yellow-500 hover:bg-yellow-700 dark:hover:bg-yellow-600 rounded-md text-sm px-1.5 py-1">{{ student.LePhuc }}</button>
+            <button v-else-if="student.LePhuc == 'Đã trả'" @click.ctrl ="editColumnVestments(student.Row, 0)" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-gray-200 rounded-md text-sm px-1.5 py-1 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">{{ student.LePhuc }}</button>
+            <!-- <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-300 rounded-md text-sm px-1.5 py-1">Yellow</button> -->
+            <span v-else >{{ student.LePhuc }}</span>
         </td>
         <td data-label="Xếp loại" class="lg:hidden">
           {{ student.XepLoai }}
@@ -291,21 +298,24 @@ const callNameStudentSound = payload => {
         <td data-label="Số hiệu bằng" class="lg:hidden">
           {{ student.SoHieuBang }}
         </td>
+         <td data-label="Song bằng, song ngành" class="lg:hidden" v-if="student.SongBangSongNganh" >
+          {{ student.SongBangSongNganh }}
+        </td>
         <td data-label="Điện thoại" class="lg:hidden">
           {{ student.DienThoai }}
         </td>
         <td data-label="Email" class="lg:hidden">
           {{ student.Email }}
         </td>
-        <td data-label="Thời gian chờ" class="lg:hidden">
+        <td data-label="Thời gian chờ" class="lg:hidden" v-if="student.NgayTao">
           {{ new Date(student.NgayTao).toLocaleString("vi") == 'Invalid Date' ? student.NgayTao : new
           Date(student.NgayTao).toLocaleString("vi")
           }}
         </td>
-        <td data-label="Người xử lý" class="lg:hidden">
+        <td data-label="Người xử lý" class="lg:hidden" v-if="student.NguoiXuLy">
           {{ student.NguoiXuLy }}
         </td>
-        <td data-label="Thời gian nhận bằng" class="lg:hidden">
+        <td data-label="Thời gian nhận bằng" class="lg:hidden" v-if="student.ThoiGianNhanBang">
           {{ new Date(student.ThoiGianNhanBang).toLocaleString("vi") == 'Invalid Date' ? student.ThoiGianNhanBang : new
           Date(student.ThoiGianNhanBang).toLocaleString("vi")
           }}
@@ -324,8 +334,6 @@ const callNameStudentSound = payload => {
         </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="warning" :icon="mdiLeadPencil" small v-if="student.ThieuHSHP != ''"
-              @click="setCurrentStudentEdit(student, index)" />
             <ButtonWait v-if="student.TrangThai == 1" />
             <!-- <ButtonPropressing v-else-if="student.TrangThai == 2" /> -->
             <ButtonFinish v-else-if="student.TrangThai == 3" />
@@ -334,6 +342,24 @@ const callNameStudentSound = payload => {
               chờ xác nhận
             </p>
             <ButtonTransferToWait v-else @click="transferToWait(student.Row)" />
+            <BaseButton color="warning" :icon="mdiLeadPencil" small v-if="student.ThieuHSHP != ''"
+              @click="setCurrentStudentEdit(student, index)" class="lg:hidden" />
+            <span class="lg:hidden">
+             <BaseButton color="success" :icon="mdiSpeakerPlay" small @click.stop="
+                callNameStudentSound(
+                  `Xin mời bạn:  ${student.HoTen}, ${textSound}`
+                )
+              " />
+              <BaseButton color="warning" :icon="mdiClockIn" small v-if="student.TrangThai === 2"
+                @click="transferToOldPositionQueue(student.Row)" />
+              <BaseButton color="warning" :icon="mdiPriorityLow" small
+                v-if="student.TrangThai == 1 || student.TrangThai == 2"
+                @click="transferToLastQueue(student.Row)" />
+              <BaseButton color="danger" :icon="mdiTrashCan" small
+                v-if="student.TrangThai == 1 || student.TrangThai == 2"
+                @click="removeFromQueue(student.Row)" />
+          </span>
+
           </BaseButtons>
         </td>
       </tr>
@@ -451,7 +477,7 @@ const callNameStudentSound = payload => {
                 }}
               </p>
               <p class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
-                Người xử lý: {{ currentStudent.KhaoSat }}
+                Người xử lý: {{ currentStudent.NguoiXuLy }}
               </p>
               <p class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
                 Nhận bằng:
@@ -553,3 +579,4 @@ const callNameStudentSound = payload => {
     </section>
   </OverlayLayer>
 </template>
+

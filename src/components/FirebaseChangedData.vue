@@ -21,6 +21,8 @@ const changeRemoveFromQueue = ref(db, 'changeRemoveFromQueue');
 const changeArmyFinish = ref(db, 'changeArmyFinish');
 const changeArmyNotReceived = ref(db, 'changeArmyNotReceived');
 const changeEditColumnNotEnough = ref(db, 'changeEditColumnNotEnough');
+const changeEditColumnVestments = ref(db, 'changeEditColumnVestments');
+const changeSurvey = ref(db, 'changeSurvey');
 
 // const a = ref('changed')
 // onValue(starCountRef, (snapshot) => {
@@ -113,6 +115,22 @@ onChildChanged(changeEditColumnNotEnough, (snapshot) => {
       toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' đã được cập nhật!', timeout: 5 });
     }
   // }
+});
+onChildChanged(changeSurvey, (snapshot) => {
+  mainStore.fetchData()
+      toastStore.add({ title: 'title', body: '+1 sinh viên gửi khảo sát thành công', timeout: 3 });
+});
+onChildChanged(changeEditColumnVestments, (snapshot) => {
+  let data;
+    onValue(changeEditColumnVestments, (val) => {
+      data = val.val();
+    });
+    const currentStudent = mainStore.students.filter(item => (item.Row === data.row));
+    if(data.data == 1){
+      toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' đã trả lễ phục!', timeout: 5 });
+    }else{
+      toastStore.add({ title: 'title', body: 'Cập nhật lại mục lễ phục của sinh viên '+ currentStudent[0].HoTen +'!', timeout: 5 });
+    }
 });
 </script>
 

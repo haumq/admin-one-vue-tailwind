@@ -200,6 +200,7 @@ const checked = (isChecked, client) => {
     );
   }
 };
+const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${mainStore.Area}, để nhận bằng`: 'đến quầy hồ sơ!' );
 
 const keyEnterHook = e => {
     if (e.key === 'Enter') {
@@ -220,7 +221,7 @@ const keyEnterHook = e => {
     } else if (e.keyCode === 120) {
       e.preventDefault()
       if(currentStudent.value){
-      const text = `Mời bạn ${currentStudent.value.HoTen}, đến quầy số 1, để nhận bằng`
+      const text = `Mời bạn ${currentStudent.value.HoTen}, ${textSound}`
       callNameStudentSound(text)
       }
     } else if (e.keyCode === 8) {
@@ -369,7 +370,7 @@ const keyEnterHook = e => {
               color="success"
               :icon="mdiSpeakerPlay"
               small
-              @click="callNameStudentSound(`Mời bạn ${currentStudent.HoTen}, đến quầy số 1, để nhận bằng`)"
+              @click="callNameStudentSound(`Mời bạn ${currentStudent.value.HoTen}, ${textSound}`)"
             />
 
             <BaseButton

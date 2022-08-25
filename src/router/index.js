@@ -79,6 +79,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'Certificate'
+    },
+    path: '/certificate',
+    name: 'certificate',
+    component: () => import('@/views/Certificate.vue')
+  },
+  {
+    meta: {
       title: 'Student'
     },
     path: '/student',
