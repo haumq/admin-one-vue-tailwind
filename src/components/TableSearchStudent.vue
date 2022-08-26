@@ -13,7 +13,8 @@ import {
   mdiSpeakerPlay,
   mdiClockIn,
   mdiCheckboxMarkedOutline,
-  mdiLeadPencil
+  mdiLeadPencil,
+  mdiVolumeHigh
 } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
@@ -352,7 +353,7 @@ const callNameStudentSound = payload => {
             <BaseButton color="warning" :icon="mdiLeadPencil" small v-if="student.ThieuHSHP != ''"
               @click="setCurrentStudentEdit(student, index)" class="lg:hidden" />
             <span class="lg:hidden">
-             <BaseButton color="success" :icon="mdiSpeakerPlay" small @click.stop="
+             <BaseButton color="success" :icon="mdiVolumeHigh" small @click.stop="
                 callNameStudentSound(
                   `Xin mời bạn:  ${student.HoTen}, ${textSound}`
                 )
@@ -529,7 +530,7 @@ const callNameStudentSound = payload => {
               Tra thông tin sinh viên
             </h5>
             <BaseButtons type="justify-center mb-5" no-wrap>
-              <BaseButton color="success" :icon="mdiSpeakerPlay" small @click.stop="
+              <BaseButton color="success" :icon="mdiVolumeHigh" small @click.stop="
                 callNameStudentSound(
                   `Xin mời bạn:  ${currentStudent.HoTen}, ${textSound}`
                 )
