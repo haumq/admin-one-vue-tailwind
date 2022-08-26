@@ -303,7 +303,11 @@ onBeforeUnmount(() => {
         </td>
         <td data-label="Số Vào Sổ">
           {{ student.SoVaoSo }}
-          <p v-if="student.SongBangSongNganh"> <small>Song bằng/ song ngành: </small><br/>{{ student.SongBangSongNganh }}</p>
+           <p v-if="student.SongBangSongNganh" class="hidden lg:inline-block"> <small>Song bằng/ song ngành: </small><br/>{{ student.SongBangSongNganh }}</p>
+        </td>
+        <td data-label="SBSN:" class="lg:hidden" v-if="student.SongBangSongNganh">
+          {{ student.SongBangSongNganh }}
+
         </td>
         <td data-label="GDQP">
           {{ student.GDQP }}
@@ -317,6 +321,31 @@ onBeforeUnmount(() => {
         <td data-label="Lễ Phục">
           {{ student.LePhuc }}
         </td>
+         <td data-label="Xếp loại" class="lg:hidden">
+          {{ student.XepLoai }}
+        </td>
+        <td data-label="Số hiệu bằng" class="lg:hidden">
+          {{ student.SoHieuBang }}
+        </td>
+        <td data-label="Điện thoại" class="lg:hidden">
+          {{ student.DienThoai }}
+        </td>
+        <td data-label="Email" class="lg:hidden">
+          {{ student.Email }}
+        </td>
+        <td data-label="Thời gian chờ" class="lg:hidden" v-if="student.NgayTao">
+          {{ new Date(student.NgayTao).toLocaleString("vi") == 'Invalid Date' ? student.NgayTao : new
+          Date(student.NgayTao).toLocaleString("vi")
+          }}
+        </td>
+        <td data-label="Người xử lý" class="lg:hidden" v-if="student.NguoiXuLy">
+          {{ student.NguoiXuLy }}
+        </td>
+        <td data-label="Thời gian nhận bằng" class="lg:hidden" v-if="student.ThoiGianNhanBang">
+          {{ new Date(student.ThoiGianNhanBang).toLocaleString("vi") == 'Invalid Date' ? student.ThoiGianNhanBang : new
+          Date(student.ThoiGianNhanBang).toLocaleString("vi")
+          }}
+        </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-end" no-wrap>
             <span v-if="student.TrangThai == 1">
@@ -326,6 +355,40 @@ onBeforeUnmount(() => {
                 small
                 @click="setCurrentStudent(student, index)"
               />
+              <span class="lg:hidden ">
+                <BaseButton
+                  color="success"
+                  class="mr-2"
+                  :icon="mdiSpeakerPlay"
+                  small
+                  @click.stop="
+                    callNameStudentSound(
+                      `Xin mời bạn:  ${student.HoTen}, ${textSound}`
+                    )
+                  "
+                />
+                <BaseButton
+                  color="warning"
+                  class="mr-2"
+                  :icon="mdiPriorityLow"
+                  small
+                  @click="transferToProcess(student.Row)"
+                />
+
+                <BaseButton
+                  color="warning"
+                  :icon="mdiClockIn"
+                  small
+                  v-if="currentStudent.TrangThai === 2"
+                  @click="transferToOldPositionQueue(student.Row)"
+                />
+                <BaseButton
+                  color="danger"
+                  :icon="mdiTrashCan"
+                  small
+                  @click="removeFromQueue(student.Row)"
+                />
+              </span>
               <BaseButton
                 color="danger"
                 :icon="mdiCheckboxMarkedOutline"
@@ -438,7 +501,7 @@ onBeforeUnmount(() => {
         class="w-full max-w-5xl z-10 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
       > -->
         <section
-          class="flex flex-col lg:flex-row p-2 mb-4 w-full max-w-5xl z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          class="flex flex-col overflow-y-scroll lg:flex-row p-2 mb-4 w-full max-w-5xl z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
           v-if="currentStudent"
           @click="isModalActive = true"
         >

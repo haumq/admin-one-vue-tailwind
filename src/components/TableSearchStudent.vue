@@ -45,6 +45,9 @@ const searchKey = computed(() => mainStore.searchKey)
 console.log(searchKey.value)
 
 const transferToWait = (payload) => mainStore.transferToWait(payload);
+const transferToLastQueue = (payload) => mainStore.transferToLastQueue(payload);
+const removeFromQueue = (payload) => mainStore.removeFromQueue(payload);
+const transferToOldPositionQueue = (payload) => mainStore.transferToOldPositionQueue(payload);
 const editColumnVestments = (row, value) => mainStore.editColumnVestments(row, value);
 const editColumnNotEnough = (row, value) => {
   mainStore.editColumnNotEnough(row, value);
@@ -273,7 +276,11 @@ const callNameStudentSound = payload => {
         </td>
         <td data-label="Số Vào Sổ">
           {{ student.SoVaoSo }}
-           <p v-if="student.SongBangSongNganh"> <small>Song bằng/ song ngành: </small><br/>{{ student.SongBangSongNganh }}</p>
+           <p v-if="student.SongBangSongNganh" class="hidden lg:inline-block"> <small>Song bằng/ song ngành: </small><br/>{{ student.SongBangSongNganh }}</p>
+        </td>
+        <td data-label="SBSN:" class="lg:hidden" v-if="student.SongBangSongNganh">
+          {{ student.SongBangSongNganh }}
+
         </td>
         <td data-label="GDQP">
           {{ student.GDQP }}
@@ -397,7 +404,7 @@ const callNameStudentSound = payload => {
         class="w-full max-w-5xl z-10 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
       > -->
       <section
-        class="flex flex-col lg:flex-row p-2 mb-4 w-full max-w-5xl  z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+        class="flex flex-col overflow-y-scroll lg:flex-row p-2 mb-4 w-full max-w-5xl  z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
         v-if="currentStudent" @click="isModalActive = true">
         <div class="px-2 lg:w-2/3">
           <h4 class="mb-5 text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center drop-shadow-lg">

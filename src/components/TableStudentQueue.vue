@@ -12,7 +12,8 @@ import {
   mdiPriorityLow,
   mdiPriorityHigh,
   mdiSpeakerPlay,
-  mdiClockIn
+  mdiClockIn,
+  mdiCheckboxMarkedOutline
 } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import SkeletonTable from "@/components/SkeletonTable.vue";
@@ -66,7 +67,7 @@ const waitList = computed(() => {
     students = mainStore.students
   }
   students = students.filter(
-    (item) => item.TrangThai == 1 || item.TrangThai == 2
+    (item) => item.TrangThai == 1
   );
   return students.sort((a, b) => {
     return new Date(a.NgayTao) - new Date(b.NgayTao);
@@ -75,7 +76,7 @@ const waitList = computed(() => {
 });
 const currentStudent = computed(() =>
 {
-  let t = waitList.value.filter(item => (item.TrangThai == 1 || (item.TrangThai == 2 && (item.NguoiXuLy == '' || item.NguoiXuLy == userEmail.value))))
+  let t = waitList.value.filter(item => (item.TrangThai == 1 || ((item.NguoiXuLy == '' || item.NguoiXuLy == userEmail.value))))
   // console.log(t)
   // console.log(userEmail.value)
   return t.shift()
@@ -356,10 +357,12 @@ const keyEnterHook = e => {
         </div>
         <div class="p-5">
           <BaseButtons type="justify-center lg:justify-around mb-5" no-wrap >
-           <ButtonHandle v-if="currentStudent.TrangThai == 1" @click="transferToProcess(currentStudent.Row)" />
-           <ButtonPropressing v-else-if="currentStudent.TrangThai == 2" @click="transferToFisnish(currentStudent.Row)" />
-           <ButtonFinish v-else-if="currentStudent.TrangThai == 3" />
-           <span v-else>Khác</span>
+           <BaseButton
+                color="success"
+                :icon="mdiCheckboxMarkedOutline"
+                @click="transferToProcess(currentStudent.Row)"
+                label="Lấy bằng"
+              />
          </BaseButtons>
 
             <h5 class="mb-5 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
