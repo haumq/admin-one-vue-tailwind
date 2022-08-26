@@ -13,7 +13,8 @@ import {
   mdiPriorityHigh,
   mdiSpeakerPlay,
   mdiClockIn,
-  mdiCheckboxMarkedOutline
+  mdiCheckboxMarkedOutline,
+  mdiVolumeHigh
 } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
@@ -359,7 +360,7 @@ onBeforeUnmount(() => {
                 <BaseButton
                   color="success"
                   class="mr-2"
-                  :icon="mdiSpeakerPlay"
+                  :icon="mdiVolumeHigh"
                   small
                   @click.stop="
                     callNameStudentSound(
@@ -648,8 +649,7 @@ onBeforeUnmount(() => {
               <BaseButtons type="justify-center mb-5" no-wrap>
                 <BaseButton
                   color="success"
-                  :icon="mdiSpeakerPlay"
-                  small
+                  :icon="mdiVolumeHigh"
                   @click.stop="
                     callNameStudentSound(
                       `Xin mời bạn:  ${currentStudent.HoTen}, ${textSound}`
