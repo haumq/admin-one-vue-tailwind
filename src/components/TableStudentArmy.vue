@@ -13,7 +13,8 @@ import {
   mdiPriorityHigh,
   mdiSpeakerPlay,
   mdiClockIn,
-  mdiSeal
+  mdiSeal,
+  mdiVolumeHigh
 } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import SkeletonTable from "@/components/SkeletonTable.vue";
@@ -267,7 +268,7 @@ const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${main
             Ngày sinh: {{
               new Date(currentStudent.NgaySinh).toLocaleDateString() == "Invalid Date"
                 ? currentStudent.NgaySinh
-                : new Date(currentStudent.NgaySinh).toLocaleDateString("vi", { dateStyle: 'short' })
+                : new Date(currentStudent.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
           }}
           </p>
           <p class=" md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">
@@ -344,7 +345,7 @@ const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${main
             <BaseButtons type="justify-center mb-5" no-wrap >
             <BaseButton
               color="success"
-              :icon="mdiSpeakerPlay"
+              :icon="mdiVolumeHigh"
               small
               @click="callNameStudentSound(`Mời bạn ${currentStudent.HoTen}, ${textSound}`)"
             />
@@ -411,7 +412,7 @@ const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${main
           <small class="hidden lg:block">{{
               new Date(student.NgaySinh).toLocaleDateString() == "Invalid Date"
                 ? student.NgaySinh
-                : new Date(student.NgaySinh).toLocaleDateString("vi", { dateStyle: 'short' })
+                : new Date(student.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
           }}</small>
           <small class="hidden lg:block">{{ student.Nganh }}</small>
         </td>
@@ -419,7 +420,7 @@ const textSound = computed(() => mainStore.Area > 0 ? `đến quầy số ${main
           {{
               new Date(student.NgaySinh).toLocaleDateString() == "Invalid Date"
                 ? student.NgaySinh
-                : new Date(student.NgaySinh).toLocaleDateString()
+                : new Date(student.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
           }}
         </td>
         <td data-label="Ngành" class="lg:hidden">

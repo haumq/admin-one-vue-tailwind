@@ -41,7 +41,7 @@ const items = computed(() => {
   }else{
     students = mainStore.students
   }
- 
+
   students = students.filter(item => item.TrangThai == 3);
   return students.sort((a, b) => {
     return new Date(a.ThoiGianNhanBang) - new Date(b.ThoiGianNhanBang);
@@ -212,11 +212,11 @@ const checked = (isChecked, client) => {
         </td>
         <td data-label="Tên" class="lg:whitespace-nowrap" >
           <p class="font-bold">{{ student.HoTen }}</p>
-            <small class="hidden lg:block">{{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString() }}</small>
+            <small class="hidden lg:block">{{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'}) }}</small>
             <small class="hidden lg:block">{{ student.Nganh }}</small >
         </td>
         <td data-label="Ngày Sinh" class="lg:hidden">
-          {{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString() }}
+          {{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'}) }}
         </td>
         <td data-label="Ngành" class="lg:hidden">
           {{ student.Nganh }}
@@ -236,6 +236,15 @@ const checked = (isChecked, client) => {
         <td data-label="Lễ Phục">
           {{ student.LePhuc }}
         </td>
+        <td data-label="Thời gian chờ" class="lg:hidden">
+          {{ new Date(student.NgayTao).toLocaleString() == 'Invalid Date' ? student.NgayTao : new Date(student.NgayTao).toLocaleString("vi") }}
+        </td>
+        <td data-label="Nhận bằng" class="lg:hidden">
+          {{ new Date(student.ThoiGianNhanBang).toLocaleString() == 'Invalid Date' ? student.ThoiGianNhanBang : new Date(student.ThoiGianNhanBang).toLocaleString("vi") }}
+        </td>
+        <td data-label="Người xử lý" class="lg:hidden">
+          {{ student.NguoiXuLy }}
+        </td>
         <!-- <td data-label="Progress" class="lg:w-32">
           <progress
             class="flex w-2/5 self-center lg:w-full"
@@ -252,8 +261,8 @@ const checked = (isChecked, client) => {
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <ButtonFinish />
           </BaseButtons>
-           <small class="text-right">{{ new Date(student.ThoiGianNhanBang).toLocaleString() == 'Invalid Date' ? student.ThoiGianNhanBang : new Date(student.ThoiGianNhanBang).toLocaleString("vi") }}</small>
-           <br /><small class="text-right ">@{{ student.NguoiXuLy }}</small>
+           <small class="text-right hidden lg:inline-block" >{{ new Date(student.ThoiGianNhanBang).toLocaleString() == 'Invalid Date' ? student.ThoiGianNhanBang : new Date(student.ThoiGianNhanBang).toLocaleString("vi") }}</small>
+           <br /><small class="text-right hidden lg:inline-block">@{{ student.NguoiXuLy }}</small>
         </td>
       </tr>
     </tbody>

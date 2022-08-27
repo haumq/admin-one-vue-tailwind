@@ -263,13 +263,13 @@ const callNameStudentSound = payload => {
           <p class="font-bold">{{ student.HoTen }}</p>
           <!-- <small class="hidden lg:block">{{ new Date(student.NgaySinh).constructor.toString().indexOf("Date") > -1 ? new Date(student.NgaySinh).toLocaleDateString() : student.NgaySinh  }}</small> -->
           <small class="hidden lg:block">{{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ?
-            student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString()
+            student.NgaySinh : new Date(student.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
             }}</small>
           <small class="hidden lg:block">{{ student.Nganh }}</small>
         </td>
         <td data-label="Ngày Sinh" class="lg:hidden">
           {{ new Date(student.NgaySinh).toLocaleDateString() == 'Invalid Date' ? student.NgaySinh : new
-          Date(student.NgaySinh).toLocaleDateString()
+          Date(student.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
           }}
         </td>
         <td data-label="Ngành" class="lg:hidden">
@@ -345,9 +345,9 @@ const callNameStudentSound = payload => {
             <ButtonWait v-if="student.TrangThai == 1" />
             <!-- <ButtonPropressing v-else-if="student.TrangThai == 2" /> -->
             <ButtonFinish v-else-if="student.TrangThai == 3" />
-            <p v-else-if="student.TrangThai == 2">
-              Đã xuất bằng,<br />
-              chờ xác nhận
+            <p v-else-if="student.TrangThai == 2" class="mr-4 text-sm text-center leading-tight lg:leading-normal">
+              <p class="mb-0 mr-0">Đã xuất bằng,</p>
+              <p>chờ xác nhận</p>
             </p>
             <ButtonTransferToWait v-else @click="transferToWait(student.Row)" />
             <BaseButton color="warning" :icon="mdiLeadPencil" small v-if="student.ThieuHSHP != ''"
@@ -430,10 +430,7 @@ const callNameStudentSound = payload => {
                 new Date(currentStudent.NgaySinh).toLocaleDateString() ==
                 "Invalid Date"
                 ? currentStudent.NgaySinh
-                : new Date(currentStudent.NgaySinh).toLocaleDateString(
-                "vi",
-                { dateStyle: "short" }
-                )
+                : new Date(currentStudent.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
                 }}
               </p>
               <p class="md:mb-3 text-base text-gray-500 md:text-lg dark:text-gray-400">

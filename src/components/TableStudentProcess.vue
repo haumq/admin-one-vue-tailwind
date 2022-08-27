@@ -13,7 +13,8 @@ import {
   mdiPriorityHigh,
   mdiSpeakerPlay,
   mdiClockIn,
-  mdiCheckboxMarkedCircleOutline
+  mdiCheckboxMarkedCircleOutline,
+  mdiVolumeHigh
 } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
@@ -285,7 +286,7 @@ onBeforeUnmount(() => {
           <small class="hidden lg:block">{{
             new Date(student.NgaySinh).toLocaleDateString() == "Invalid Date"
               ? student.NgaySinh
-              : new Date(student.NgaySinh).toLocaleDateString()
+              : new Date(student.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
           }}</small>
           <small class="hidden lg:block">{{ student.Nganh }}</small>
         </td>
@@ -293,7 +294,7 @@ onBeforeUnmount(() => {
           {{
             new Date(student.NgaySinh).toLocaleDateString() == "Invalid Date"
               ? student.NgaySinh
-              : new Date(student.NgaySinh).toLocaleDateString()
+              : new Date(student.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
           }}
         </td>
         <td data-label="Ngành" class="lg:hidden">
@@ -454,7 +455,7 @@ onBeforeUnmount(() => {
         class="w-full max-w-5xl z-10 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
       > -->
         <section
-          class="flex flex-col lg:flex-row p-2 mb-4 w-full max-w-5xl z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          class="flex flex-col overflow-y-scroll lg:flex-row p-2 mb-4 w-full max-w-5xl z-10 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700"
           v-if="currentStudent"
           @click="isModalActive = true"
         >
@@ -485,10 +486,7 @@ onBeforeUnmount(() => {
                     new Date(currentStudent.NgaySinh).toLocaleDateString() ==
                     "Invalid Date"
                       ? currentStudent.NgaySinh
-                      : new Date(currentStudent.NgaySinh).toLocaleDateString(
-                          "vi",
-                          { dateStyle: "short" }
-                        )
+                      : new Date(currentStudent.NgaySinh).toLocaleDateString('vi', {day: 'numeric', month: 'numeric', year: 'numeric'})
                   }}
                 </p>
                 <p
@@ -611,7 +609,7 @@ onBeforeUnmount(() => {
               <BaseButtons type="justify-center mb-5" no-wrap>
                 <BaseButton
                   color="success"
-                  :icon="mdiSpeakerPlay"
+                  :icon="mdiVolumeHigh"
                   small
                   @click.stop="
                     callNameStudentSound(
