@@ -55,6 +55,7 @@ const editColumnNotEnough = (row, value) => {
   isEditModalActive.value = !isEditModalActive.value;
   // console.log(isEditModalActive.value)
 }
+const columnNotEnoughValue = ref('')
 
 // const transferToWaitListRow = computed(() => mainStore.transferToWaitListRow);
 const items = computed(() => {
@@ -77,6 +78,7 @@ const setCurrentStudent = (payload, index) => {
 }
 const setCurrentStudentEdit = (payload, index) => {
   currentStudent.value = payload
+  columnNotEnoughValue.value = payload.ThieuHSHP
   currentStudentIndex.value = index
   isEditModalActive.value = !isEditModalActive.value
 }
@@ -564,7 +566,7 @@ const callNameStudentSound = payload => {
           <textarea id="comment" rows="4"
             class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
             placeholder="Write a comment..."
-            v-model="currentStudent.ThieuHSHP"
+            v-model="columnNotEnoughValue"
             required>
             </textarea>
         </div>
@@ -572,7 +574,7 @@ const callNameStudentSound = payload => {
           <span class="italic text-sm text-gray-400">Nếu bổ sung đủ vui lòng xóa trống</span>
           <div class="flex pl-0 space-x-1 sm:pl-2">
             <button type="button"
-              @click.stop="editColumnNotEnough(currentStudent.Row, currentStudent.ThieuHSHP)"
+              @click.stop="editColumnNotEnough(currentStudent.Row, columnNotEnoughValue)"
               class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
               <span class="mr-2">Cập nhật</span>
               <svg aria-hidden="true" class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
