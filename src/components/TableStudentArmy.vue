@@ -57,7 +57,7 @@ const finish = computed(() => {
 const waitList = computed(() => {
   let students = mainStore.students;
   students = students.filter(
-    (item) => (item.ThoiGianNhanBang) && item.GDQP.trim() != '' && !item.ThoiGianNhanGDQP
+    (item) => (item.NgayTao) && item.GDQP.trim() != '' && !item.ThoiGianNhanGDQP
   );
   return students.sort((a, b) => {
     return new Date(a.NgayTao) - new Date(b.NgayTao);

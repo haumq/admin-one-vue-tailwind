@@ -126,6 +126,7 @@ onChildChanged(changeEditColumnVestments, (snapshot) => {
       data = val.val();
     });
     const currentStudent = mainStore.students.filter(item => (item.Row === data.row));
+    mainStore.setEditColumnVestments(data.row, data.data)
     if(data.data == 1){
       toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' đã trả lễ phục!', timeout: 5 });
     }else{
