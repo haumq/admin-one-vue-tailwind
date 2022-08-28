@@ -126,10 +126,11 @@ onChildChanged(changeEditColumnVestments, (snapshot) => {
       data = val.val();
     });
     const currentStudent = mainStore.students.filter(item => (item.Row === data.row));
-    mainStore.setEditColumnVestments(data.row, data.data)
     if(data.data == 1){
+      mainStore.setEditColumnVestments(data.row, 'Đã trả')
       toastStore.add({ title: 'title', body: 'Sinh viên '+ currentStudent[0].HoTen +' đã trả lễ phục!', timeout: 5 });
     }else{
+      mainStore.setEditColumnVestments(data.row, 'Có mượn')
       toastStore.add({ title: 'title', body: 'Cập nhật lại mục lễ phục của sinh viên '+ currentStudent[0].HoTen +'!', timeout: 5 });
     }
 });
