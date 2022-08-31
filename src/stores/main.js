@@ -521,7 +521,7 @@ export const useMainStore = defineStore('main', {
 
             this.setEditColumnVestments(row, value == 1 ? 'Đã trả' : 'Có mượn');
             this.setApiSpinerHide()
-            this.setApiSuccessful()
+            // this.setApiSuccessful()
           }
         })
         .catch(error => {

@@ -14,7 +14,11 @@ import {
   mdiClockIn,
   mdiCheckboxMarkedOutline,
   mdiLeadPencil,
-  mdiVolumeHigh
+  mdiVolumeHigh,
+  mdiCheckboxMarkedCircleOutline,
+  mdiDeleteSweep,
+  mdiDeleteForever
+
 } from "@mdi/js";
 import CardBoxModal from "@/components/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
@@ -48,7 +52,10 @@ console.log(searchKey.value)
 const transferToWait = (payload) => mainStore.transferToWait(payload);
 const transferToLastQueue = (payload) => mainStore.transferToLastQueue(payload);
 const removeFromQueue = (payload) => mainStore.removeFromQueue(payload);
+const transferToProcess = (payload) => mainStore.transferToProcess(payload);
 const transferToOldPositionQueue = (payload) => mainStore.transferToOldPositionQueue(payload);
+const transferToArmyFinish =  (payload) => mainStore.transferToArmyFinish(payload);
+const transferToArmyNotReceived =  (payload) => mainStore.transferToArmyNotReceived(payload);
 const editColumnVestments = (row, value) => mainStore.editColumnVestments(row, value);
 const editColumnNotEnough = (row, value) => {
   mainStore.editColumnNotEnough(row, value);
@@ -250,7 +257,7 @@ const callNameStudentSound = payload => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="student in itemsPaginated" :key="student.Row" @dblclick="setCurrentStudent(student, index)">
+      <tr v-for="(student, index) in itemsPaginated" :key="student.Row" @dblclick="setCurrentStudent(student, index)">
         <TableCheckboxCell v-if="checkable" @checked="checked($event, student)" />
         <!-- <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="client.HoTen" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
@@ -344,7 +351,8 @@ const callNameStudentSound = payload => {
         </td> -->
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <ButtonWait v-if="student.TrangThai == 1" />
+            <!-- <ButtonWait v-if="student.TrangThai == 1" /> -->
+            <p v-if="student.TrangThai == 1" class="hidden lg:inline-block" >Chờ</p>
             <!-- <ButtonPropressing v-else-if="student.TrangThai == 2" /> -->
             <ButtonFinish v-else-if="student.TrangThai == 3" />
             <p v-else-if="student.TrangThai == 2" class="mr-4 text-sm text-center leading-tight lg:leading-normal">
@@ -352,6 +360,12 @@ const callNameStudentSound = payload => {
               <p>chờ xác nhận</p>
             </p>
             <ButtonTransferToWait v-else @click="transferToWait(student.Row)" />
+            <BaseButton color="danger" :icon="mdiCheckboxMarkedOutline" small label="Bằng" v-if="student.TrangThai === 1"
+                @click="transferToProcess(student.Row)" />
+            <BaseButton color="danger" :icon="mdiCheckboxMarkedCircleOutline" small v-if="student.TrangThai === 1 && !currentStudent.ThoiGianNhanGDQP && !currentStudent.GDQP"
+                @click="transferToArmyFinish(student.Row)" />
+            <BaseButton color="warning" :icon="mdiDeleteSweep" small v-if="student.TrangThai === 1 && !currentStudent.ThoiGianNhanGDQP && !currentStudent.GDQP"
+                @click="transferToArmyNotReceived(student.Row)" />
             <BaseButton color="warning" :icon="mdiLeadPencil" small v-if="student.ThieuHSHP != ''"
               @click="setCurrentStudentEdit(student, index)" class="lg:hidden" />
             <span class="lg:hidden">
@@ -360,6 +374,7 @@ const callNameStudentSound = payload => {
                   `Xin mời bạn:  ${student.HoTen}, ${textSound}`
                 )
               " />
+
               <BaseButton color="warning" :icon="mdiClockIn" small v-if="student.TrangThai === 2"
                 @click="transferToOldPositionQueue(student.Row)" />
               <BaseButton color="warning" :icon="mdiPriorityLow" small
@@ -512,16 +527,24 @@ const callNameStudentSound = payload => {
             </span>
           </div>
           <div class="p-5">
-            <BaseButtons type="justify-center lg:justify-around mb-5" no-wrap>
+            <BaseButtons type="justify-center lg:justify-center mb-5" no-wrap>
               <!-- <ButtonPropressing
                   @click="transferToFisnish(currentStudent.Row)"
                 /> -->
-              <!-- <BaseButton
+              <BaseButton
                 color="success"
                 :icon="mdiCheckboxMarkedOutline"
-                @click="transferToWait(student.Row)"
+                @click="transferToWait(currentStudent.Row)"
+                v-if="currentStudent.TrangThai === 1"
                 label="Lấy bằng"
-              /> -->
+              />
+              <!-- <BaseButton color="danger" :icon="mdiCheckboxMarkedOutline" small label="Bằng" v-if="currentStudent.TrangThai === 1"
+                @click="transferToProcess(currentStudent.Row)" /> -->
+            <BaseButton color="danger" :icon="mdiCheckboxMarkedCircleOutline" v-if="currentStudent.TrangThai === 1 && !currentStudent.ThoiGianNhanGDQP && !currentStudent.GDQP"
+                @click="transferToArmyFinish(currentStudent.Row)" />
+            <BaseButton color="warning" :icon="mdiDeleteSweep" v-if="currentStudent.TrangThai === 1 && !currentStudent.ThoiGianNhanGDQP && !currentStudent.GDQP"
+                @click="transferToArmyNotReceived(currentStudent.Row)" />
+
               <ButtonTransferToWait v-if="!currentStudent.TrangThai" @click="transferToWait(currentStudent.Row)" />
             </BaseButtons>
 

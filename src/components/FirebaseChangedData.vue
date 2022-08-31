@@ -118,7 +118,7 @@ onChildChanged(changeEditColumnNotEnough, (snapshot) => {
 });
 onChildChanged(changeSurvey, (snapshot) => {
   mainStore.fetchData()
-      toastStore.add({ title: 'title', body: '+1 sinh viên gửi khảo sát thành công', timeout: 3 });
+      // toastStore.add({ title: 'title', body: '+1 sinh viên gửi khảo sát thành công', timeout: 3 });
 });
 onChildChanged(changeEditColumnVestments, (snapshot) => {
   let data;
